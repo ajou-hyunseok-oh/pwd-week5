@@ -10,6 +10,7 @@ async function connectDB(uri, dbName) {
     autoIndex: process.env.NODE_ENV !== 'production',
     maxPoolSize: 10,
     serverSelectionTimeoutMS: 10000,
+    family: 4,
   });
   mongoose.connection.on('connected', () => {
     console.log(`[MongoDB] connected: ${mongoose.connection.name}`);
