@@ -5,8 +5,7 @@ async function connectDB(uri, dbName) {
   if (!uri) {
     throw new Error('MONGODB_URI is missing. Set it in environment variables.');
   }
-  const connectionString = dbName ? `${uri}${uri.includes('?') ? '&' : '?'}appName=${dbName}` : uri;
-  await mongoose.connect(connectionString, {
+  await mongoose.connect(uri, {
     dbName,
     autoIndex: process.env.NODE_ENV !== 'production',
     maxPoolSize: 10,
