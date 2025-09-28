@@ -55,6 +55,29 @@ exports.createRestaurant = asyncHandler(async (req, res) => {
   res.status(201).json({ data: restaurant });
 });
 
+exports.updateRestaurant = asyncHandler(async (req, res) => {
+  const payload = {
+    ...req.body,
+    recommendedMenu: normaliseMenu(req.body?.recommendedMenu)
+  };
+
+  const updated = await restaurantService.updateRestaurant(req.params.id, payload);
+  if (!updated) {
+    res.status(404).json({ error: { message: 'Restaurant not found' } });
+    return;
+  }
+  res.json({ data: updated });
+});
+
+exports.deleteRestaurant = asyncHandler(async (req, res) => {
+  const deleted = await restaurantService.deleteRestaurant(req.params.id);
+  if (!deleted) {
+    res.status(404).json({ error: { message: 'Restaurant not found' } });
+    return;
+  }
+  res.status(204).send();
+});
+
 exports.resetDemoData = asyncHandler(async (req, res) => {
   if (process.env.NODE_ENV === 'production') {
     res.status(403).json({ error: { message: 'Not allowed in production' } });

@@ -67,11 +67,49 @@ async function resetStore() {
   await Restaurant.insertMany(seed);
 }
 
+async function ensureSeededOnce() {
+  const count = await Restaurant.estimatedDocumentCount();
+  if (count > 0) return { seeded: false, count };
+  const seed = readSeedDataSync();
+  await Restaurant.insertMany(seed);
+  return { seeded: true, count: seed.length };
+}
+
+async function updateRestaurant(id, payload) {
+  const numericId = Number(id);
+  const updated = await Restaurant.findOneAndUpdate(
+    { id: numericId },
+    {
+      $set: {
+        name: payload.name,
+        category: payload.category,
+        location: payload.location,
+        priceRange: payload.priceRange,
+        rating: payload.rating,
+        description: payload.description,
+        recommendedMenu: Array.isArray(payload.recommendedMenu) ? payload.recommendedMenu : undefined,
+        image: payload.image,
+      }
+    },
+    { new: true, runValidators: true, lean: true }
+  );
+  return updated;
+}
+
+async function deleteRestaurant(id) {
+  const numericId = Number(id);
+  const deleted = await Restaurant.findOneAndDelete({ id: numericId }).lean();
+  return deleted;
+}
+
 module.exports = {
   getAllRestaurants,
   getAllRestaurantsSync,
   getRestaurantById,
   getPopularRestaurants,
   createRestaurant,
+  updateRestaurant,
+  deleteRestaurant,
   resetStore,
+  ensureSeededOnce,
 };

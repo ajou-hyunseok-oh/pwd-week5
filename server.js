@@ -1,6 +1,7 @@
 ﻿require('dotenv').config();
 const { connectDB, closeDB } = require('./src/config/db');
 const createApp = require('./src/app');
+const { ensureSeededOnce } = require('./src/services/restaurants.service');
 
 const PORT = process.env.PORT || 3000;
 
@@ -9,6 +10,7 @@ const app = createApp();
 async function start() {
   try {
     await connectDB(process.env.MONGODB_URI, process.env.DB_NAME);
+    await ensureSeededOnce();
     if (require.main === module) {
       app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
     }
