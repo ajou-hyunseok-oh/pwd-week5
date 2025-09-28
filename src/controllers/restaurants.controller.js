@@ -56,7 +56,11 @@ exports.createRestaurant = asyncHandler(async (req, res) => {
 });
 
 exports.resetDemoData = asyncHandler(async (req, res) => {
-  restaurantService.resetStore();
+  if (process.env.NODE_ENV === 'production') {
+    res.status(403).json({ error: { message: 'Not allowed in production' } });
+    return;
+  }
+  await restaurantService.resetStore();
   const restaurants = await restaurantService.getAllRestaurants();
   res.json({ data: restaurants });
 });

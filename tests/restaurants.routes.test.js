@@ -5,8 +5,8 @@ const restaurantService = require('../src/services/restaurants.service');
 describe('Restaurant routes', () => {
   let app;
 
-  beforeEach(() => {
-    restaurantService.resetStore();
+  beforeEach(async () => {
+    await restaurantService.resetStore();
     app = createApp();
   });
 
