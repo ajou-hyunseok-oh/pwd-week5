@@ -16,11 +16,7 @@ describe('Restaurant routes', () => {
     expect(response.body.data).toBeInstanceOf(Array);
   });
 
-  test('GET /api/restaurants/sync-demo flags synchronous execution', async () => {
-    const response = await request(app).get('/api/restaurants/sync-demo');
-    expect(response.status).toBe(200);
-    expect(response.body.meta.execution).toBe('synchronous');
-  });
+  // removed sync-demo test; API is CRUD-only now
 
   test('GET /api/restaurants/:id returns an item', async () => {
     const response = await request(app).get('/api/restaurants/1');

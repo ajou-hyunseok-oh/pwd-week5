@@ -3,13 +3,11 @@ const restaurantsController = require('../controllers/restaurants.controller');
 
 const router = express.Router();
 
+// CRUD 전용 엔드포인트
 router.get('/', restaurantsController.getRestaurants);
-router.get('/sync-demo', restaurantsController.getRestaurantsSync);
-router.get('/popular', restaurantsController.getPopularRestaurants);
 router.get('/:id', restaurantsController.getRestaurant);
 router.post('/', restaurantsController.createRestaurant);
 router.put('/:id', restaurantsController.updateRestaurant);
 router.delete('/:id', restaurantsController.deleteRestaurant);
-router.post('/reset-demo', restaurantsController.resetDemoData);
 
 module.exports = router;

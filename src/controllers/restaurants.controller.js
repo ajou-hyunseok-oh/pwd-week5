@@ -18,16 +18,6 @@ exports.getRestaurants = asyncHandler(async (req, res) => {
   res.json({ data: restaurants });
 });
 
-exports.getRestaurantsSync = (req, res) => {
-  const restaurants = restaurantService.getAllRestaurantsSync();
-  res.json({
-    data: restaurants,
-    meta: {
-      execution: 'synchronous'
-    }
-  });
-};
-
 exports.getRestaurant = asyncHandler(async (req, res) => {
   const restaurant = await restaurantService.getRestaurantById(req.params.id);
 
@@ -37,12 +27,6 @@ exports.getRestaurant = asyncHandler(async (req, res) => {
   }
 
   res.json({ data: restaurant });
-});
-
-exports.getPopularRestaurants = asyncHandler(async (req, res) => {
-  const limit = req.query.limit ? Number(req.query.limit) : 5;
-  const restaurants = await restaurantService.getPopularRestaurants(limit);
-  res.json({ data: restaurants });
 });
 
 exports.createRestaurant = asyncHandler(async (req, res) => {
@@ -78,12 +62,3 @@ exports.deleteRestaurant = asyncHandler(async (req, res) => {
   res.status(204).send();
 });
 
-exports.resetDemoData = asyncHandler(async (req, res) => {
-  if (process.env.NODE_ENV === 'production') {
-    res.status(403).json({ error: { message: 'Not allowed in production' } });
-    return;
-  }
-  await restaurantService.resetStore();
-  const restaurants = await restaurantService.getAllRestaurants();
-  res.json({ data: restaurants });
-});
