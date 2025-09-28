@@ -18,6 +18,12 @@ exports.getRestaurants = asyncHandler(async (req, res) => {
   res.json({ data: restaurants });
 });
 
+exports.getPopularRestaurants = asyncHandler(async (req, res) => {
+  const limit = Number(req.query.limit) || 5;
+  const restaurants = await restaurantService.getPopularRestaurants(limit);
+  res.json({ data: restaurants });
+});
+
 exports.getRestaurant = asyncHandler(async (req, res) => {
   const restaurant = await restaurantService.getRestaurantById(req.params.id);
 
