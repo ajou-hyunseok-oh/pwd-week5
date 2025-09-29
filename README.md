@@ -12,11 +12,11 @@
 ## 🛠️ 프로젝트 소개
 
 ### 만들어볼 서비스
-**Ajou Campus Foodmap API**
+**MongoDB 연동 Ajou Campus Foodmap API + React(운영, 제보 페이지)**
 - 아주대학교 주변 맛집 데이터를 DB에 저장/조회/관리
 - 사용자 제보를 받아 승인/거절
 
-### 주요 기능
+### 서버 주요 기능
 - `/health`: 서버/DB 상태 확인 (mongoose 연결 상태 포함)
 - `/api/restaurants`:
   - `GET /` 전체 맛집 목록
@@ -32,6 +32,58 @@
   - `PUT /:id` 제보 수정/상태 업데이트
   - `DELETE /:id` 제보 삭제
 - 초기 시드: 서버 시작 시 `ensureSeededOnce`로 `src/data/restaurants.json`을 한 번만 삽입
+
+
+### 프론트엔드 주요 기능
+- admin 페이지 : 맛집 추가, 삭제, 조회, 수정
+- submissions 페이지 : 제보, 조회, 승인, 거부
+
+## Foodmap API 레퍼런스
+
+### Health
+- `GET /health`
+  - 응답: `{ status: 'ok', db: <mongooseState> }`
+
+### Restaurants
+- `GET /api/restaurants`
+- `GET /api/restaurants/:id`
+- `GET /api/restaurants/popular?limit=5`
+- `POST /api/restaurants`
+  - body 예시
+    ```json
+    {
+      "name": "송림식당",
+      "category": "한식",
+      "location": "아주대 정문",
+      "priceRange": "7,000-13,000원",
+      "rating": 4.5,
+      "description": "깔끔하고 맛있음",
+      "recommendedMenu": ["순두부", "김치찌개"]
+    }
+    ```
+- `PUT /api/restaurants/:id`
+- `DELETE /api/restaurants/:id`
+
+### Submissions
+- `GET /api/submissions?status=pending|approved|rejected`
+- `GET /api/submissions/:id`
+- `POST /api/submissions`
+  - body 예시
+    ```json
+    {
+      "restaurantName": "테스트 식당",
+      "category": "한식",
+      "location": "아주대 정문",
+      "priceRange": "8,000-12,000원",
+      "recommendedMenu": ["김치찌개"],
+      "review": "가성비 좋음",
+      "submitterName": "홍길동",
+      "submitterEmail": "test@example.com"
+    }
+    ```
+- `PUT /api/submissions/:id`
+- `DELETE /api/submissions/:id`
+
 
 ### 사용 기술
 - Runtime: Node.js 22
@@ -200,57 +252,7 @@ server.js                         # 서버 시작 + DB 연결 + 시드 주입
 
 ---
 
-### Step 6. 프로젝트 기능 구현
-
-# Back-end
-
-## 🔌 API 레퍼런스
-
-### Health
-- `GET /health`
-  - 응답: `{ status: 'ok', db: <mongooseState> }`
-
-### Restaurants
-- `GET /api/restaurants`
-- `GET /api/restaurants/:id`
-- `GET /api/restaurants/popular?limit=5`
-- `POST /api/restaurants`
-  - body 예시
-    ```json
-    {
-      "name": "송림식당",
-      "category": "한식",
-      "location": "아주대 정문",
-      "priceRange": "7,000-13,000원",
-      "rating": 4.5,
-      "description": "깔끔하고 맛있음",
-      "recommendedMenu": ["순두부", "김치찌개"]
-    }
-    ```
-- `PUT /api/restaurants/:id`
-- `DELETE /api/restaurants/:id`
-
-### Submissions
-- `GET /api/submissions?status=pending|approved|rejected`
-- `GET /api/submissions/:id`
-- `POST /api/submissions`
-  - body 예시
-    ```json
-    {
-      "restaurantName": "테스트 식당",
-      "category": "한식",
-      "location": "아주대 정문",
-      "priceRange": "8,000-12,000원",
-      "recommendedMenu": ["김치찌개"],
-      "review": "가성비 좋음",
-      "submitterName": "홍길동",
-      "submitterEmail": "test@example.com"
-    }
-    ```
-- `PUT /api/submissions/:id`
-- `DELETE /api/submissions/:id`
-
----
+### Step 6. Back-end 기능 구현
 
 4주차 실습내용을 기반으로 
 - src/data/restaurants.json: 4주차 변경 없음
@@ -793,7 +795,7 @@ module.exports = {
 };
 ```
 
-# Front-end
+### Step 7. Front-end 기능 구현
 3주차 실습내용을 기반으로 
 
 ```html
@@ -1424,7 +1426,8 @@ export default api;
 
 ---
 
-## Step 9. Render Express 배포 설정
+## Step 8. 배포
+### Render Express 배포
 1. 4주차 실습 서버 프로젝트 삭제
 2. 새 Web Service 생성(GitHub pwd-week5 연동)
 3. 환경 설정을 다음과 같이 입력합니다.
@@ -1439,37 +1442,12 @@ export default api;
 4. (선택) Environment Variables 추가
    - 향후 비밀 키나 DB URL 등도 이곳에서 관리할 예정
 5. `Create Web Service` 클릭 → 빌드 로그가 성공(`Live`)인지 확인합니다.
----
-
-## Step 10. 테스트
-## 🧰 테스트
-```bash
-npm test
-```
-- `mongodb-memory-server`를 사용하여 메모리 상의 MongoDB로 테스트가 실행됩니다.
-- 실 DB 연결이 필요 없습니다.
 
 
-## 🧪 CLI Test(curl)
-```bash
-# Health
-curl http://localhost:3000/health
-
-# 맛집 목록
-curl http://localhost:3000/api/restaurants
-
-# 인기 맛집 3개
-curl "http://localhost:3000/api/restaurants/popular?limit=3"
-
-# 제보 생성 (PowerShell)
-curl -X POST http://localhost:3000/api/submissions ^
-  -H "Content-Type: application/json" ^
-  -d "{\"restaurantName\":\"테스트\",\"category\":\"한식\",\"location\":\"अ주대\"}"
-```
-> macOS/Linux는 줄바꿈에 `\` 사용
-
----
-
+### Netlify React App 배포
+pwd-wee3 admin, submissions 개발 후 
+- Netlify 무료 크레딧 모두 소진 시 Vercel에 배포
+- 다른 무료 서비스 조사하여 배포 가능
 ---
 
 
