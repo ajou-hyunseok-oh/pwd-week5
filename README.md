@@ -147,12 +147,12 @@ MONGODB_URI: mongodb+srv://<db_username>:<db_password>@<cluster_name>.1dp1rbj.mo
 DB_NAME: cluster_name
 ```
 
-7) 좌측 메 Database Access에서 DB 사용자 생성 및 비밀번호 설정
+7) 좌측 메뉴 Database Access에서 DB 사용자 생성 및 비밀번호 설정
 - Username: 사용자의 이름을 설정
 - Password: 안전한 비밀번호를 입력
 - Database User Privileges
 - Admin or Read&Write 선택
-8) 좌측 메 Network Access에서 Edit 선택 후
+8) 좌측 메뉴 Network Access에서 Edit 선택 후
 - Allow Access From anywhere 선택
 - Access List Entry: 0.0.0.0/0 확인
 
