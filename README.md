@@ -121,7 +121,53 @@ MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net (프로젝트 
 ## 🚀 프로젝트 시작하기
 
 ### Step 1. MongoDB Atlas DB 구축
+1. MongoDB Atlas 계정 생성
+- MongoDB Atlas 웹사이트 접속
+- 페이지 우측 상단의 Sign Up 버튼을 클릭하여 MongoDB Atlas 계정을 생성
+- 구글 계정으로 생성해도 상관 없음
 
+2. MongoDB Atlas 클러스터 생성
+- 계정 생성 후 로그인하면 Create a Cluster 버튼 확인 후클릭하여 클러스터 생성을 시작
+- 클러스터 생성 화면에서 다음과 같은 설정을 진행합니다.
+
+- Cloud Provider & Region: 클라우드 서비스 제공자와 데이터베이스를 호스팅할 지역을 선택. (예: AWS, Google Cloud 등)
+- Cluster Tier: 사용하려는 클러스터의 성능과 크기를 선택. (무료 클러스터는 M0)
+- Cluster Name: 클러스터 이름을 지정.
+- Create Cluster 버튼을 클릭하여 클러스터 생성이 완료될 때까지 기다림. (최소 5분 소요될 수 있음)
+
+3. Database 생성
+- 클러스터가 준비되면, 클러스터 대시보드에서 Collections 탭을 클릭.
+- Create Database 버튼을 클릭하여 새로운 데이터베이스를 생성.
+- 데이터베이스 이름을 입력하고, 첫 번째 컬렉션 이름을 입력.
+- Create 버튼을 클릭하여 데이터베이스가 생성.
+
+4. DB 사용자 생성 및 비밀번호 설정
+- MongoDB Atlas 대시보드에서 Database Access 탭을 클릭.
+- Add New Database User 버튼을 클릭하여 새로운 데이터베이스 사용자를 추가.
+- 사용자 이름과 비밀번호를 입력.
+- Username: 사용자의 이름을 설정.
+- Password: 안전한 비밀번호를 입력.
+- Database User Privileges: 사용자에게 필요한 권한을 설정.
+* Read and write to any database: 모든 데이터베이스에 읽기/쓰기 권한 부여
+* Read only: 읽기 전용 권한 부여
+* Atlas admin: Atlas 관리 권한 부여
+- Add User 버튼을 클릭하여 사용자가 생성.
+
+5. 화이트리스트 설정 (IP 허용)
+- MongoDB Atlas 대시보드에서 Network Access 탭을 클릭.
+- IP Whitelist 섹션에서 Add IP Address 버튼을 클릭하여 화이트리스트에 IP 주소를 추가.
+- Allow access from anywhere: 모든 IP에서 접근 허용하려면 0.0.0.0/0을 입력.
+- Add IP Address 버튼을 클릭하여 설정을 완료.
+
+6. 클러스터 연결 (연결 문자열)
+- Clusters 탭으로 돌아가서 Connect 버튼을 클릭.
+- Connect your application을 선택.
+- MongoDB 연결 문자열을 확인하고 복사하여 애플리케이션 코드에서 사용 가능.
+- Username과 Password는 앞서 설정한 DB 사용자 이름과 비밀번호로 교체.
+
+Render 환경 변수 등록을 위해 일단 저장
+- MONGODB_URI : 'mongodb+srv://<username>:<password>@<cluster0>.mongodb.net/...'
+- DB_NAME :  '....'
 ---
 
 ### Step 2: Express 프로젝트 개발환경 구축
@@ -1438,8 +1484,8 @@ export default api;
    - **Start Command**: `npm start`
    - **Instance Type**: Free
    - **Auto Deploy**: Yes
-4. (선택) Environment Variables 추가
-   - 향후 비밀 키나 DB URL 등도 이곳에서 관리할 예정
+4. Environment Variables 추가
+   - MongoDB Atlas에서 생성해둔 MONGODB_URI(mongodb+srv://<userid>:<password>@<projectname>.ktfnu5b.mongodb.net/?retryWrites=true&w=majority&appName=<projectname>),  DB_NAME 추가
 5. `Create Web Service` 클릭 → 빌드 로그가 성공(`Live`)인지 확인합니다.
 
 
