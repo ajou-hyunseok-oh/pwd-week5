@@ -158,7 +158,7 @@ DB_NAME: cluster_name
 
 
 7. Render 환경 변수 등록을 위해 일단 저장
-- MONGODB_URI : 'mongodb+srv://<username>:<password>@<cluster0>.mongodb.net/...'
+- MONGODB_URI : 'mongodb+srv://<username>:<password>@<clustername>.mongodb.net/...'
 - DB_NAME :  '....'
 ---
 
