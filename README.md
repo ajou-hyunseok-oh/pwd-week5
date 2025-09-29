@@ -120,7 +120,11 @@ MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net (프로젝트 
 
 ## 🚀 프로젝트 시작하기
 
-### Step 1: Express 프로젝트 개발환경 구축
+### Step 1. MongoDB Atlas DB 구축
+
+---
+
+### Step 2: Express 프로젝트 개발환경 구축
 
 ```bash
 # Express 프로젝트 폴더 생성
@@ -134,7 +138,7 @@ $ npm install express --save
 ```
 ---
 
-### Step 2: 프로젝트 GitHub 저장소 연동
+### Step 3: 프로젝트 GitHub 저장소 연동
 // 깃허브 접속 후 pwd-week5 저장소 생성 후
 
 ```bash
@@ -169,7 +173,7 @@ git push -u origin main
 
 ---
 
-### Step 3. 의존성 설치 & 로컬 서버 실행 테스트트
+### Step 4. 의존성 설치 & 로컬 서버 실행 테스트
 패키지 의존성(package.json) 설정
 ```json
 {
@@ -216,7 +220,7 @@ curl http://localhost:3000/health
 
 ---
 
-### Step 4. 폴더 구조
+### Step 5. 폴더 구조
 ```
 src/
  ├─ app.js                        # Express 앱 구성 (라우팅/미들웨어)
@@ -244,11 +248,6 @@ tests/                            # 모듈 테스트 코드
 package.json                      # 패키지 의존성
 server.js                         # 서버 시작 + DB 연결 + 시드 주입
 ```
-
----
-
-### Step 5. MongoDB Atlas DB 구축
-
 
 ---
 
