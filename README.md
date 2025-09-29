@@ -145,12 +145,12 @@ MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net (프로젝트 
 - MongoDB Atlas 대시보드에서 Database Access 탭을 클릭.
 - Add New Database User 버튼을 클릭하여 새로운 데이터베이스 사용자를 추가.
 - 사용자 이름과 비밀번호를 입력.
-- Username: 사용자의 이름을 설정.
-- Password: 안전한 비밀번호를 입력.
+Username: 사용자의 이름을 설정.
+Password: 안전한 비밀번호를 입력.
 - Database User Privileges: 사용자에게 필요한 권한을 설정.
-* Read and write to any database: 모든 데이터베이스에 읽기/쓰기 권한 부여
-* Read only: 읽기 전용 권한 부여
-* Atlas admin: Atlas 관리 권한 부여
+Read and write to any database: 모든 데이터베이스에 읽기/쓰기 권한 부여
+Read only: 읽기 전용 권한 부여
+Atlas admin: Atlas 관리 권한 부여
 - Add User 버튼을 클릭하여 사용자가 생성.
 
 5. 화이트리스트 설정 (IP 허용)
@@ -165,7 +165,7 @@ MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net (프로젝트 
 - MongoDB 연결 문자열을 확인하고 복사하여 애플리케이션 코드에서 사용 가능.
 - Username과 Password는 앞서 설정한 DB 사용자 이름과 비밀번호로 교체.
 
-Render 환경 변수 등록을 위해 일단 저장
+7. Render 환경 변수 등록을 위해 일단 저장
 - MONGODB_URI : 'mongodb+srv://<username>:<password>@<cluster0>.mongodb.net/...'
 - DB_NAME :  '....'
 ---
