@@ -122,7 +122,7 @@ MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net (프로젝트 
 
 ### Step 1. MongoDB Atlas DB 구축
 1. MongoDB Atlas 계정 생성
-- MongoDB Atlas 웹사이트 접속[Link](https://www.mongodb.com/lp/cloud/atlas/try4-reg?utm_source=google&utm_campaign=search_gs_pl_evergreen_atlas_core-high-int_prosp-brand_gic-null_ww-tier1_ps-all_desktop_eng_lead&utm_term=mongodb%20atlas&utm_medium=cpc_paid_search&utm_ad=e&utm_ad_campaign_id=22031347569&adgroup=173739098393&cq_cmp=22031347569&gad_source=1&gad_campaignid=22031347569&gbraid=0AAAAADQ1402y_p8l0LfMLBoZwtqky2utF&gclid=CjwKCAjwuePGBhBZEiwAIGCVS6U6e6RzHzqeDcUKNCbVwii4zv7l1O2WSgUjhtlMNTbL78XKZdFPlhoCY0QQAvD_BwE)
+- MongoDB Atlas 웹사이트 [Link](https://www.mongodb.com/lp/cloud/atlas/try4-reg?utm_source=google&utm_campaign=search_gs_pl_evergreen_atlas_core-high-int_prosp-brand_gic-null_ww-tier1_ps-all_desktop_eng_lead&utm_term=mongodb%20atlas&utm_medium=cpc_paid_search&utm_ad=e&utm_ad_campaign_id=22031347569&adgroup=173739098393&cq_cmp=22031347569&gad_source=1&gad_campaignid=22031347569&gbraid=0AAAAADQ1402y_p8l0LfMLBoZwtqky2utF&gclid=CjwKCAjwuePGBhBZEiwAIGCVS6U6e6RzHzqeDcUKNCbVwii4zv7l1O2WSgUjhtlMNTbL78XKZdFPlhoCY0QQAvD_BwE) 접속
 - 페이지 우측 상단의 Sign Up 버튼을 클릭하여 MongoDB Atlas 계정을 생성
 - 구글 계정으로 생성해도 상관 없음
 
