@@ -1,0 +1,94 @@
+{
+  "results": [
+    {
+      "name": "repository: seeded list without backend",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: filter",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: likes persist after reload",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: detail direct URL and reload",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: popular",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: required validation",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: submission persistence and payload",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: independent browser data",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: storage failure has no false success",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: existing submission management and approval",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: approved detail uses string ID",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: seeded list without backend",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: filter",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: likes persist after reload",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: detail direct URL and reload",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: popular",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: required validation",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: submission persistence and payload",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: independent browser data",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: storage failure has no false success",
+      "status": "PASS"
+    },
+    {
+      "name": "No backend fetch/XHR requests",
+      "status": "PASS"
+    },
+    {
+      "name": "No uncaught browser errors",
+      "status": "PASS"
+    }
+  ],
+  "apiRequests": [],
+  "pageErrors": []
+}

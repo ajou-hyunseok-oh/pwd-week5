@@ -1,0 +1,14 @@
+
+> npx
+> 'cva' corrected --template react-swc --no-interactive
+
+│
+◇  Scaffolding project in /private/var/folders/_n/t23rhq_53jxc070w5jzp5whc0000gn/T/pwd-week5-review-9gx9gdvh/corrected...
+│
+└  Done. Now run:
+
+  cd corrected
+  npm install
+  npm run dev
+
+npm warn exec The following package was not found and will be installed: create-vite@7.1.2

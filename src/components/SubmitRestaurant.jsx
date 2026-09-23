@@ -150,7 +150,7 @@ function SubmitRestaurant() {
       toast.success('맛집이 성공적으로 제보되었습니다! 🎉');
       reset();
       setTimeout(() => setSubmitted(false), 5000);
-    } catch (error) {
+    } catch {
       toast.error('제출 중 오류가 발생했습니다.');
     }
   };
@@ -173,6 +173,7 @@ function SubmitRestaurant() {
   return (
     <FormContainer>
       <FormTitle>🍽️ 새로운 맛집 제보하기</FormTitle>
+      <p>실습 제보는 이 브라우저에만 저장되며 다른 사용자와 공유되지 않습니다.</p>
       
       <form onSubmit={handleSubmit(onSubmit)}>
         

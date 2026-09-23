@@ -1,0 +1,13 @@
+
+> npx
+> 'create-vite' . --template react --no-interactive
+
+│
+◇  Scaffolding project in /private/var/folders/_n/t23rhq_53jxc070w5jzp5whc0000gn/T/pwd-week5-review-9gx9gdvh/readme...
+│
+└  Done. Now run:
+
+  npm install
+  npm run dev
+
+npm warn exec The following package was not found and will be installed: create-vite@9.2.1

@@ -15,7 +15,7 @@
 - 🍜 맛집 목록 보기
 - ❤️ 좋아요 기능 (LocalStorage)
 - 🔍 카테고리별 필터링
-- 📝 맛집 제보 (백엔드 API 연동)
+- 📝 맛집 제보 (LocalStorage)
 - 🏆 인기 TOP 5
 - 📱 반응형 디자인
 
@@ -37,14 +37,16 @@
 
 #### Node.js 설치 확인
 ```bash
-# Node.js 버전 확인 (22.0.0 이상 필요)
+# Node.js 버전 확인 (24.x LTS 사용)
 node --version
 
-# npm 버전 확인 (11.0.0 이상 필요)
+# npm 버전 확인 (Node.js 24에 포함된 npm 사용)
 npm --version
 ```
 
-> ⚠️ Node.js가 없다면 [nodejs.org](https://nodejs.org)에서 LTS 버전을 다운로드하세요.
+> ⚠️ Node.js가 없다면 [nodejs.org](https://nodejs.org)에서 24.x LTS 버전을 다운로드하세요.
+
+검증 환경: Node.js 24.21.0 / npm 11.19.0 (2026년 9월 23일).
 
 #### Git 설치 확인
 ```bash
@@ -77,66 +79,15 @@ mkdir pwd-week5
 # 프로젝트 폴더로 이동
 cd pwd-week5
 
-# 개발 서버 실행 (테스트)
-npm create vite@latest . -- --template react
+# React + JavaScript + SWC 템플릿 생성 (실습 설정과 일치하는 버전)
+npm create vite@7.1.2 . -- --template react-swc
 
-> npx
-> create-vite . react
-
-│
-◆  Select a framework:
-│  ○ Vanilla
-│  ○ Vue
-│  ● React
-│  ○ Preact
-│  ○ Lit
-│  ○ Svelte
-│  ○ Solid
-│  ○ Qwik
-│  ○ Angular
-│  ○ Marko
-│  ○ Others
-
- Select a variant:
-│  ○ TypeScript
-│  ○ TypeScript + SWC
-│  ○ JavaScript
-│  ● JavaScript + SWC
-│  ○ React Router v7 ↗
-│  ○ TanStack Router ↗
-│  ○ RedwoodSDK ↗
-│  ○ RSC ↗
-
-
- Scaffolding project in C:\Users\hsoh\WorkspaceAjou\pwd-week5...
-    npm install
-    npm run dev
-
-
+# 의존성 설치 및 개발 서버 실행
 npm install
-
-added 112 packages, and audited 113 packages in 4s
-
-29 packages are looking for funding
-  run `npm fund` for details
-
-found 0 vulnerabilities
-
-
 npm run dev
-
-> pwd-week5@0.0.0 dev
-> vite
-
-
-  VITE v7.1.5  ready in 317 ms
-
-  ➜  Local:   http://localhost:5173/
-  ➜  Network: use --host to expose
-  ➜  press h + enter to show help
 ```
 
-> 💡 브라우저에서 http://localhost:5173 이 열리면 성공!
+> 💡 터미널에 표시된 주소(기본 http://localhost:5173)를 열면 됩니다. 처음에는 Vite 기본 화면이 표시되며, 아래 핵심 컴포넌트 구현을 적용하면 맛집 화면으로 바뀝니다.
 
 ### Step 2: 프로젝트 GitHub 저장소 연동
 // 깃허브 접속 후 pwd-week5 저장소 생성 후
@@ -189,13 +140,17 @@ git push -u origin main
 | react-spinners | 로딩 애니메이션 | ^0.17.0 |
 ---
 
+`package.json`
+
 ```json
-/* package.json */
 {
   "name": "pwd-week5",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -230,6 +185,8 @@ git push -u origin main
 ```
 
 ### 한 번에 모두 설치하기
+
+새로 작성한 프로젝트는 아래 명령으로 설치합니다. 완성 저장소를 복제한 경우에는 제공된 `package-lock.json`의 버전을 재현하도록 `npm ci`를 사용합니다.
 
 ```bash
 npm install
@@ -1252,29 +1209,24 @@ function SubmitRestaurant() {
 
   const onSubmit = async (data) => {
     try {
-      // Vercel에 배포한 화면에서 별도 백엔드 API로 제출
-      const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
-      const response = await fetch(`${apiBaseUrl}/api/submissions`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...data,
-          recommendedMenu: data.recommendedMenu
-            .split(/[\n,]/)
-            .map((item) => item.trim())
-            .filter(Boolean)
-        })
-      });
-      if (!response.ok) {
-        throw new Error('제보 저장에 실패했습니다.');
-      }
-      if (response.ok) {
-        setSubmitted(true);
-        toast.success('맛집이 성공적으로 제보되었습니다! 🎉');
-        reset();
-        setTimeout(() => setSubmitted(false), 5000);
-      }
-    } catch (error) {
+      // 백엔드 없이 현재 브라우저에 실습 제보 저장
+      const storageKey = 'pwd-week5-submissions';
+      const submissions = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      const submission = {
+        ...data,
+        id: crypto.randomUUID(),
+        status: 'pending',
+        recommendedMenu: data.recommendedMenu
+          .split(/[\n,]/)
+          .map((item) => item.trim())
+          .filter(Boolean)
+      };
+      localStorage.setItem(storageKey, JSON.stringify([...submissions, submission]));
+      setSubmitted(true);
+      toast.success('맛집이 성공적으로 제보되었습니다! 🎉');
+      reset();
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch {
       toast.error('제출 중 오류가 발생했습니다.');
     }
   };
@@ -1297,6 +1249,7 @@ function SubmitRestaurant() {
   return (
     <FormContainer>
       <FormTitle>🍽️ 새로운 맛집 제보하기</FormTitle>
+      <p>실습 제보는 이 브라우저에만 저장되며 다른 사용자와 공유되지 않습니다.</p>
       
       <form onSubmit={handleSubmit(onSubmit)}>
         
@@ -1757,25 +1710,18 @@ export default SubmitPage;
 ```
 ---
 
-## 📝 제보 API 연결 설정
-### 1. 배포용 API 주소 설정
+## 📝 제보 저장 설정
+### 1. 브라우저 저장 확인
 
-Vercel 정적 배포에서는 기존 Netlify Forms의 숨겨진 폼과 제출 처리를 사용할 수 없습니다. 위 제보 폼 예제는 별도 백엔드의 `POST /api/submissions`로 JSON을 전송합니다. 실제 저장소의 `SubmitRestaurant.jsx`는 이미 `submissionAPI.createSubmission()`으로 같은 API를 호출합니다.
+이번 실습은 백엔드나 DB 없이 진행합니다. 맛집 목록은 위 가상 데이터로 표시하고, 제보는 현재 브라우저의 LocalStorage에 저장합니다. API 주소·환경변수·CORS 설정은 필요하지 않습니다.
 
-백엔드 API는 이 저장소에 포함되어 있지 않으므로 별도로 실행·배포된 서버가 필요합니다. 폼 필드(`restaurantName`, `category`, `location` 등)와 배열 형태의 `recommendedMenu`를 받아 저장하는 API를 준비합니다. 기존 연습용 가상 서버 예제는 그대로 유지하며, 해당 가상 서버만으로 제보가 저장되지는 않습니다.
+1. 맛집 제보 폼을 작성하고 제출합니다.
+2. 개발자 도구 → Application(또는 Storage) → Local Storage에서 현재 사이트를 선택합니다.
+3. `pwd-week5-submissions` 키에 입력한 제보가 저장되었는지 확인합니다.
+4. 페이지를 새로고침한 뒤에도 같은 키에 제보가 남아 있는지 확인합니다.
+5. 다른 브라우저에서는 해당 제보가 보이지 않는지 확인합니다.
 
-로컬에서는 프로젝트 루트의 `.env.local`에 API 주소를 설정합니다.
-
-```dotenv
-VITE_API_BASE_URL=http://localhost:3000
-```
-
-- 로컬 백엔드가 없다면 준비된 HTTPS API 주소를 사용합니다.
-- 주소 끝에 `/api`를 붙이지 않습니다. 요청 코드에서 `/api/submissions`를 추가합니다.
-- `.env.local` 수정 후 개발 서버를 다시 시작합니다.
-- Vercel에는 방문자의 컴퓨터를 가리키는 `localhost` 대신 외부에서 접속 가능한 HTTPS API 주소를 설정합니다.
-- 백엔드 CORS에서 로컬 및 실제 Vercel 사이트 origin, 사용하는 HTTP 메서드와 `Content-Type`, OPTIONS 사전 요청을 허용합니다.
-- `VITE_` 변수는 브라우저에 공개되므로 비밀 키나 DB 비밀번호를 넣지 않습니다. [Vite 환경변수 문서](https://vite.dev/guide/env-and-mode)
+저장한 제보는 같은 브라우저·같은 사이트 주소에서만 유지됩니다. 로컬과 Vercel, Production과 Preview 주소의 데이터는 서로 공유되지 않습니다. 사이트 데이터를 삭제하면 제보도 지워집니다. 서버 저장과 사용자 간 공유는 이후 백엔드·DB 실습에서 다룹니다.
 
 ---
 
@@ -1796,14 +1742,27 @@ VITE_API_BASE_URL=http://localhost:3000
 
 ### 3. 빌드 설정
 
-자동으로 감지되지만, 확인 필요:
+구현을 마친 뒤, Vercel 배포 전에 로컬에서 확인합니다.
+
+```bash
+npm run lint
+npm run build
+npm run preview
+```
+
+터미널에 표시된 미리보기 주소(기본 `http://localhost:4173`)에서 목록·필터·상세·인기·좋아요·제보를 확인합니다. 상세 페이지와 제보 저장 확인은 새로고침 후에도 반복합니다. README 예제는 `/list`, 완성 저장소는 `/#/list` 주소를 사용합니다.
+
+2026년 9월 23일 검증에서 저장소와 README 예제 모두 설치·lint·빌드가 통과했고, 브라우저 검증 22개 항목이 통과했습니다. 백엔드 요청은 0건이었으며, 저장 실패 시 성공 메시지가 표시되지 않는 것도 확인했습니다. 검증 범위는 로컬 빌드 결과이며, 실제 Vercel 배포와 외부 음식 이미지의 가용성은 포함하지 않습니다.
+
+Vercel 빌드 설정은 자동으로 감지되지만, 확인 필요:
 
 - **Framework Preset**: `Vite`
 - **Root Directory**: `package.json`이 있는 프로젝트 루트
 - **Production Branch**: `main` (실제 기본 브랜치에 맞게 설정)
 - **Build Command**: `npm run build`
 - **Output Directory**: `dist`
-- **Environment Variables**: `VITE_API_BASE_URL`에 실제 HTTPS 백엔드 주소 입력 (Production과 Preview에 설정)
+- **Node.js Version**: `24.x` (Settings → Build and Deployment에서 확인)
+- **Environment Variables**: 이번 실습에서는 설정하지 않음
 
 README의 `BrowserRouter` 예제를 사용하는 경우, 상세 페이지 직접 접속·새로고침을 위해 프로젝트 루트에 `vercel.json`을 추가합니다. 실제 저장소의 `HashRouter`는 그대로 사용할 수 있습니다.
 
@@ -1819,7 +1778,9 @@ README의 `BrowserRouter` 예제를 사용하는 경우, 상세 페이지 직접
 }
 ```
 
-이 설정은 화면 라우팅용이며 API를 구현하지 않습니다. API 요청은 설정한 외부 백엔드 주소로 보냅니다. [Vercel Vite 배포 문서](https://vercel.com/docs/frameworks/frontend/vite)
+이 설정은 화면 라우팅용입니다. 가상 데이터와 LocalStorage를 사용하므로 별도 서버 없이 배포할 수 있습니다. [Vercel Vite 배포 문서](https://vercel.com/docs/frameworks/frontend/vite)
+
+이번 배포는 Vercel 대시보드의 `Deploy`로 진행합니다. 저장소의 기존 `npm run deploy`는 GitHub Pages용 명령이므로 이번 실습에서는 실행하지 않습니다.
 
 `Deploy` 클릭!
 
@@ -1832,14 +1793,14 @@ README의 `BrowserRouter` 예제를 사용하는 경우, 상세 페이지 직접
 ### 5. 사이트 주소 확인
 
 1. 프로젝트의 `Settings` → `Domains`에서 실제 도메인 확인
-2. 실제 사이트 origin을 백엔드 CORS 허용 목록에 등록
-3. Preview 배포에서도 제보를 테스트한다면 해당 origin도 백엔드에서 허용
+2. 해당 주소에서 목록·상세·제보 화면이 동작하는지 확인
+3. Preview 배포의 저장 데이터는 Production 주소와 별개임을 확인
 
 ### 6. 제보 확인
 
 1. 배포한 사이트에서 테스트 제보 제출
-2. 개발자 도구의 Network에서 `POST /api/submissions` 요청 주소와 성공 응답 확인
-3. 백엔드의 저장 데이터 또는 실제 저장소의 제보 관리 화면에서 제출한 항목 확인
+2. 제출 완료 메시지 확인
+3. 개발자 도구의 Local Storage에서 `pwd-week5-submissions` 확인 후 새로고침해도 남아 있는지 확인
 
 ---
 
@@ -1859,10 +1820,10 @@ README의 `BrowserRouter` 예제를 사용하는 경우, 상세 페이지 직접
 
 ### 문제 2: 제보가 작동하지 않음
 
-1. VITE_API_BASE_URL이 실제 HTTPS 백엔드 주소인지 확인
-2. 백엔드의 POST /api/submissions 구현과 저장 상태 확인
-3. 백엔드에서 실제 프런트엔드 origin과 OPTIONS 요청을 허용했는지 확인
-4. Vercel 환경변수 변경 후 새 배포 실행 (빌드 시 반영됨)
+1. 필수 입력값과 이메일 형식 확인
+2. 브라우저의 사이트 데이터 저장이 허용되어 있는지 확인
+3. Local Storage의 `pwd-week5-submissions` 값이 JSON 배열인지 확인
+4. 데이터를 확인하는 사이트 주소가 제보한 주소와 같은지 확인
 
 ## 💬 도움 & 질문
 - [Practical Web Service TA] (https://chatgpt.com/g/g-68bbbf3aa57081919811dd57100b1e46-ajou-digtalmedia-practical-web-service-ta)
@@ -1892,7 +1853,7 @@ README의 `BrowserRouter` 예제를 사용하는 경우, 상세 페이지 직접
 - GitHub 저장소에 프로젝트 버전 관리가 바르게 되고 있는가?
 - React로 개발한 컴포넌트와 페이지들이 모두 바르게 동작하는가?
 - Vercel에 GitHub 저장소가 연결되어 자동 배포가 이루어 지고 있는가?
-- 맛집 정보 제출 시 연결한 백엔드 API에 데이터가 잘 제출 되었는가?
+- 맛집 정보 제출 시 현재 브라우저의 LocalStorage에 데이터가 잘 저장되었는가?
 
 
 ## 🎉 축하합니다!

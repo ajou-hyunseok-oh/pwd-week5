@@ -1,0 +1,278 @@
+{
+  "results": [
+    {
+      "name": "repository: list",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: category filter",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: detail direct URL and reload",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: popular",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: required validation",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: submit JSON and mock persistence",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: submission list after reload",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: server error feedback",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: CORS blocked feedback",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: list",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: category filter",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: detail direct URL and reload",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: popular",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: required validation",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: submit JSON and mock persistence",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: server error feedback",
+      "status": "PASS"
+    },
+    {
+      "name": "readme: CORS blocked feedback",
+      "status": "PASS"
+    },
+    {
+      "name": "repository: unavailable API shows error",
+      "status": "PASS"
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/restaurants",
+      "mode": "ok",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/restaurants/1",
+      "mode": "ok",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/restaurants/1",
+      "mode": "ok",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/restaurants/popular",
+      "mode": "ok",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/submissions",
+      "mode": "ok",
+      "body": {
+        "restaurantName": "repository-test",
+        "category": "한식",
+        "location": "아주대 정문",
+        "recommendedMenu": [
+          "비빔밥",
+          "국수"
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/submissions",
+      "mode": "ok",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/submissions",
+      "mode": "ok",
+      "body": null
+    },
+    {
+      "method": "POST",
+      "path": "/api/submissions",
+      "mode": "error",
+      "body": {
+        "restaurantName": "repository-error",
+        "category": "한식",
+        "location": "아주대 정문",
+        "recommendedMenu": [
+          "비빔밥",
+          "국수"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/submissions",
+      "mode": "cors",
+      "body": {
+        "restaurantName": "repository-cors",
+        "category": "한식",
+        "location": "아주대 정문",
+        "recommendedMenu": [
+          "비빔밥",
+          "국수"
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/submissions",
+      "mode": "ok",
+      "body": {
+        "restaurantName": "readme-test",
+        "category": "한식",
+        "location": "아주대 정문",
+        "priceRange": "",
+        "recommendedMenu": [
+          "비빔밥",
+          "국수"
+        ],
+        "review": "",
+        "submitterName": "",
+        "submitterEmail": ""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/submissions",
+      "mode": "error",
+      "body": {
+        "restaurantName": "readme-error",
+        "category": "한식",
+        "location": "아주대 정문",
+        "priceRange": "",
+        "recommendedMenu": [
+          "비빔밥",
+          "국수"
+        ],
+        "review": "",
+        "submitterName": "",
+        "submitterEmail": ""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/submissions",
+      "mode": "cors",
+      "body": {
+        "restaurantName": "readme-cors",
+        "category": "한식",
+        "location": "아주대 정문",
+        "priceRange": "",
+        "recommendedMenu": [
+          "비빔밥",
+          "국수"
+        ],
+        "review": "",
+        "submitterName": "",
+        "submitterEmail": ""
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/restaurants",
+      "mode": "error",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/restaurants",
+      "mode": "error",
+      "body": null
+    }
+  ],
+  "pageErrors": [],
+  "storedSubmissions": [
+    {
+      "restaurantName": "repository-test",
+      "category": "한식",
+      "location": "아주대 정문",
+      "recommendedMenu": [
+        "비빔밥",
+        "국수"
+      ],
+      "id": 1,
+      "status": "pending"
+    },
+    {
+      "restaurantName": "repository-cors",
+      "category": "한식",
+      "location": "아주대 정문",
+      "recommendedMenu": [
+        "비빔밥",
+        "국수"
+      ],
+      "id": 2,
+      "status": "pending"
+    },
+    {
+      "restaurantName": "readme-test",
+      "category": "한식",
+      "location": "아주대 정문",
+      "priceRange": "",
+      "recommendedMenu": [
+        "비빔밥",
+        "국수"
+      ],
+      "review": "",
+      "submitterName": "",
+      "submitterEmail": "",
+      "id": 3,
+      "status": "pending"
+    },
+    {
+      "restaurantName": "readme-cors",
+      "category": "한식",
+      "location": "아주대 정문",
+      "priceRange": "",
+      "recommendedMenu": [
+        "비빔밥",
+        "국수"
+      ],
+      "review": "",
+      "submitterName": "",
+      "submitterEmail": "",
+      "id": 4,
+      "status": "pending"
+    }
+  ],
+  "browserVersion": "153.0.8010.53"
+}

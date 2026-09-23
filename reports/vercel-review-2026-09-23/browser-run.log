@@ -1,0 +1,18 @@
+{"name":"repository: list","status":"PASS"}
+{"name":"repository: category filter","status":"PASS"}
+{"name":"repository: detail direct URL and reload","status":"PASS"}
+{"name":"repository: popular","status":"PASS"}
+{"name":"repository: required validation","status":"PASS"}
+{"name":"repository: submit JSON and mock persistence","status":"PASS"}
+{"name":"repository: submission list after reload","status":"PASS"}
+{"name":"repository: server error feedback","status":"PASS"}
+{"name":"repository: CORS blocked feedback","status":"PASS"}
+{"name":"readme: list","status":"PASS"}
+{"name":"readme: category filter","status":"PASS"}
+{"name":"readme: detail direct URL and reload","status":"PASS"}
+{"name":"readme: popular","status":"PASS"}
+{"name":"readme: required validation","status":"PASS"}
+{"name":"readme: submit JSON and mock persistence","status":"PASS"}
+{"name":"readme: server error feedback","status":"PASS"}
+{"name":"readme: CORS blocked feedback","status":"PASS"}
+{"name":"repository: unavailable API shows error","status":"PASS"}
