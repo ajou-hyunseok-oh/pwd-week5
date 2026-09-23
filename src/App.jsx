@@ -51,7 +51,7 @@ function App() {
             </Routes>
           </main>
           <footer className="footer">
-            <p>© 2025 Ajou Campus Foodmap | Made with React</p>
+            <p>© 2026 Ajou Campus Foodmap | Made with React</p>
           </footer>
         </div>
         <ToastContainer 

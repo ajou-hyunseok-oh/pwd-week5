@@ -1,8 +1,8 @@
-# 📚 PWD Week 3 - React와 Netlify로 만드는 Ajou Campus Foodmap
+# 📚 PWD Week 5 - React와 Vercel로 만드는 Ajou Campus Foodmap
 
-> **실용 웹 개발 3주차**: React의 핵심 개념을 학습하고, 실제 작동하는 웹 서비스를 Netlify에 배포합니다.
+> **2026년 2학기 실용 웹 개발 5주차**: React의 핵심 개념을 학습하고, 실제 작동하는 웹 서비스를 Vercel에 배포합니다.
 ## 📋 강의 자료
-- [3주차 강의자료](https://drive.google.com/file/d/1EXfyxPi06jV5YWpDnW5Upiwt3Xv8j2Ec/view?usp=drive_link)
+- [5주차 강의자료](https://ajou-hyunseok-oh.github.io/pwd-2026-2/)
 
 ---
 
@@ -15,7 +15,7 @@
 - 🍜 맛집 목록 보기
 - ❤️ 좋아요 기능 (LocalStorage)
 - 🔍 카테고리별 필터링
-- 📝 맛집 제보 (Netlify Forms)
+- 📝 맛집 제보 (백엔드 API 연동)
 - 🏆 인기 TOP 5
 - 📱 반응형 디자인
 
@@ -27,7 +27,7 @@
 - **Forms**: React Hook Form
 - **State**: useState, useEffect
 - **API**: Axios, React Query
-- **Deployment**: Netlify
+- **Deployment**: Vercel
 
 ---
 
@@ -56,7 +56,7 @@ git --version
 
 ### 2. 계정 준비
 - ✅ [GitHub 계정](https://github.com) (코드 저장용)
-- ✅ [Netlify 계정](https://netlify.com) (배포용 - GitHub 계정으로 가입 권장)
+- ✅ [Vercel 계정](https://vercel.com) (배포용 - GitHub 계정으로 가입 권장)
 
 ### 3. 에디터 준비
 - 📝 [VS Code](https://code.visualstudio.com) 권장
@@ -72,10 +72,10 @@ git --version
 
 ```bash
 # React 프로젝트 폴더 생성성
-mkdir pwd-week3
+mkdir pwd-week5
 
 # 프로젝트 폴더로 이동
-cd pwd-week3
+cd pwd-week5
 
 # 개발 서버 실행 (테스트)
 npm create vite@latest . -- --template react
@@ -108,7 +108,7 @@ npm create vite@latest . -- --template react
 │  ○ RSC ↗
 
 
- Scaffolding project in C:\Users\hsoh\WorkspaceAjou\pwd-week3...
+ Scaffolding project in C:\Users\hsoh\WorkspaceAjou\pwd-week5...
     npm install
     npm run dev
 
@@ -125,7 +125,7 @@ found 0 vulnerabilities
 
 npm run dev
 
-> pwd-week3@0.0.0 dev
+> pwd-week5@0.0.0 dev
 > vite
 
 
@@ -139,7 +139,7 @@ npm run dev
 > 💡 브라우저에서 http://localhost:5173 이 열리면 성공!
 
 ### Step 2: 프로젝트 GitHub 저장소 연동
-// 깃허브 접속 후 pwd-week3 저장소 생성 후
+// 깃허브 접속 후 pwd-week5 저장소 생성 후
 
 ```bash
 # 현재 폴더를 Git 저장소(Repository)로 초기화(Initialize)
@@ -149,13 +149,13 @@ git init
 git add .
 
 # 스테이징된 파일을 커밋(Commit)으로 기록 (-m: 메시지(Message) 옵션)
-git commit -m "Init pwd-week3 : React + Vite app"
+git commit -m "Init pwd-week5 : React + Vite app"
 
 # 기본 브랜치(Branch) 이름을 main으로 변경 (-m: move)
 git branch -m main
 
 # 원격(Remote) 저장소 'origin' 등록 (GitHub URL로 연결)
-git remote add origin https://github.com/<username>/pwd-week3.git
+git remote add origin https://github.com/<username>/pwd-week5.git
 
 # 로컬 main을 원격 origin/main으로 최초 푸시(Push) (-u: 업스트림(Upstream) 설정)
 #  → 이후에는 git push 만으로도 동일 브랜치에 푸시 가능
@@ -192,7 +192,7 @@ git push -u origin main
 ```json
 /* package.json */
 {
-  "name": "pwd-week3",
+  "name": "pwd-week5",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -248,7 +248,7 @@ mkdir src/components src/pages src/services src/styles
 ### 최종 구조
 
 ```
-pwd-week3/
+pwd-week5/
 ├── src/
 │   ├── components/         # 재사용 컴포넌트
 │   │   ├── Header.jsx
@@ -272,7 +272,7 @@ pwd-week3/
 │   ├── index.css         # 기본 스타일
 │   └── main.jsx          # 진입점
 ├── .gitignore
-├── index.html            # Netlify Forms 설정
+├── index.html            # 앱 진입 HTML
 ├── package.json
 └── README.md
 └── vite.config.js
@@ -282,7 +282,7 @@ pwd-week3/
 
 ## 🔧 핵심 컴포넌트 구현
 
-### 1. index.html 수정 (Netlify Forms 추가)
+### 1. index.html 수정
 
 ```html
 <!doctype html>
@@ -297,18 +297,6 @@ pwd-week3/
   </head>
   <body>
     <noscript>이 앱을 실행하려면 JavaScript를 활성화해야 합니다.</noscript>    
-    <!-- Netlify Forms를 위한 숨겨진 폼 -->
-    <form name="restaurant-submit" netlify hidden>
-      <input type="text" name="restaurantName" />
-      <select name="category"></select>
-      <input type="text" name="location" />
-      <input type="text" name="priceRange" />
-      <textarea name="recommendedMenu"></textarea>
-      <textarea name="review"></textarea>
-      <input type="text" name="submitterName" />
-      <input type="email" name="submitterEmail" />
-    </form>
-
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>      
   </body>
@@ -382,7 +370,7 @@ function App() {
             </Routes>
           </main>
           <footer className="footer">
-            <p>© 2025 Ajou Campus Foodmap | Made with React</p>
+            <p>© 2026 Ajou Campus Foodmap | Made with React</p>
           </footer>
         </div>
         <ToastContainer 
@@ -1264,16 +1252,22 @@ function SubmitRestaurant() {
 
   const onSubmit = async (data) => {
     try {
-      // Netlify Forms로 제출
-      const response = await fetch("/", {
+      // Vercel에 배포한 화면에서 별도 백엔드 API로 제출
+      const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
+      const response = await fetch(`${apiBaseUrl}/api/submissions`, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          "form-name": "restaurant-submit",
-          ...data
-        }).toString()
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...data,
+          recommendedMenu: data.recommendedMenu
+            .split(/[\n,]/)
+            .map((item) => item.trim())
+            .filter(Boolean)
+        })
       });
-      
+      if (!response.ok) {
+        throw new Error('제보 저장에 실패했습니다.');
+      }
       if (response.ok) {
         setSubmitted(true);
         toast.success('맛집이 성공적으로 제보되었습니다! 🎉');
@@ -1305,7 +1299,6 @@ function SubmitRestaurant() {
       <FormTitle>🍽️ 새로운 맛집 제보하기</FormTitle>
       
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input type="hidden" name="form-name" value="restaurant-submit" />
         
         <FormGroup>
           <Label htmlFor="restaurantName">맛집 이름 *</Label>
@@ -1764,107 +1757,112 @@ export default SubmitPage;
 ```
 ---
 
-## 📝 Netlify Forms 설정
-### 1. 폼 요소 추가 (index.html)
-```html
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="캠퍼스 주변 맛집을 찾아보세요!" />
-    <title>Ajou Campus Foodmap - 우리 학교 맛집 지도</title>
-  </head>
-  <body>
-    <noscript>이 앱을 실행하려면 JavaScript를 활성화해야 합니다.</noscript>    
-    <!-- Netlify Forms를 위한 숨겨진 폼 -->
-    <form name="restaurant-submit" netlify hidden>
-      <input type="text" name="restaurantName" />
-      <select name="category"></select>
-      <input type="text" name="location" />
-      <input type="text" name="priceRange" />
-      <textarea name="recommendedMenu"></textarea>
-      <textarea name="review"></textarea>
-      <input type="text" name="submitterName" />
-      <input type="email" name="submitterEmail" />
-    </form>
+## 📝 제보 API 연결 설정
+### 1. 배포용 API 주소 설정
 
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>      
-  </body>
-</html>
+Vercel 정적 배포에서는 기존 Netlify Forms의 숨겨진 폼과 제출 처리를 사용할 수 없습니다. 위 제보 폼 예제는 별도 백엔드의 `POST /api/submissions`로 JSON을 전송합니다. 실제 저장소의 `SubmitRestaurant.jsx`는 이미 `submissionAPI.createSubmission()`으로 같은 API를 호출합니다.
+
+백엔드 API는 이 저장소에 포함되어 있지 않으므로 별도로 실행·배포된 서버가 필요합니다. 폼 필드(`restaurantName`, `category`, `location` 등)와 배열 형태의 `recommendedMenu`를 받아 저장하는 API를 준비합니다. 기존 연습용 가상 서버 예제는 그대로 유지하며, 해당 가상 서버만으로 제보가 저장되지는 않습니다.
+
+로컬에서는 프로젝트 루트의 `.env.local`에 API 주소를 설정합니다.
+
+```dotenv
+VITE_API_BASE_URL=http://localhost:3000
 ```
+
+- 로컬 백엔드가 없다면 준비된 HTTPS API 주소를 사용합니다.
+- 주소 끝에 `/api`를 붙이지 않습니다. 요청 코드에서 `/api/submissions`를 추가합니다.
+- `.env.local` 수정 후 개발 서버를 다시 시작합니다.
+- Vercel에는 방문자의 컴퓨터를 가리키는 `localhost` 대신 외부에서 접속 가능한 HTTPS API 주소를 설정합니다.
+- 백엔드 CORS에서 로컬 및 실제 Vercel 사이트 origin, 사용하는 HTTP 메서드와 `Content-Type`, OPTIONS 사전 요청을 허용합니다.
+- `VITE_` 변수는 브라우저에 공개되므로 비밀 키나 DB 비밀번호를 넣지 않습니다. [Vite 환경변수 문서](https://vite.dev/guide/env-and-mode)
+
 ---
 
-## 🌐 Netlify 배포
+## 🌐 Vercel 배포
 
-### 1. Netlify 계정 연결
+### 1. Vercel 계정 연결
 
-1. [app.netlify.com](https://app.netlify.com) 로그인
-2. `Add new site` 클릭
-3. `Import an existing project` 선택
+1. [vercel.com](https://vercel.com) 로그인
+2. `Add New` → `Project` 선택
+3. GitHub 저장소 Import 화면으로 이동
 
 ### 2. GitHub 연결
 
-1. `Deploy with GitHub` 선택
-2. GitHub 권한 승인
-3. 리포지토리 검색: `pwd-week3`
-4. 리포지토리 선택
+1. GitHub 계정 연결
+2. GitHub 저장소 접근 권한 승인
+3. 실습 리포지토리 검색
+4. 리포지토리 선택 후 `Import`
 
 ### 3. 빌드 설정
 
 자동으로 감지되지만, 확인 필요:
 
-- **Branch to deploy**: `main`
-- **Build command**: `npm run build`
-- **Publish directory**: `dist`
+- **Framework Preset**: `Vite`
+- **Root Directory**: `package.json`이 있는 프로젝트 루트
+- **Production Branch**: `main` (실제 기본 브랜치에 맞게 설정)
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Environment Variables**: `VITE_API_BASE_URL`에 실제 HTTPS 백엔드 주소 입력 (Production과 Preview에 설정)
 
-`Deploy site` 클릭!
+README의 `BrowserRouter` 예제를 사용하는 경우, 상세 페이지 직접 접속·새로고침을 위해 프로젝트 루트에 `vercel.json`을 추가합니다. 실제 저장소의 `HashRouter`는 그대로 사용할 수 있습니다.
+
+```json
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
+```
+
+이 설정은 화면 라우팅용이며 API를 구현하지 않습니다. API 요청은 설정한 외부 백엔드 주소로 보냅니다. [Vercel Vite 배포 문서](https://vercel.com/docs/frameworks/frontend/vite)
+
+`Deploy` 클릭!
 
 ### 4. 배포 상태 확인
 
-1. 배포 진행 상황 모니터링 (3-5분 소요)
-2. 성공 시 URL 생성: `https://pwd-week3-<username>.netlify.app`
+1. 배포 로그에서 설치 및 빌드 성공 확인
+2. 성공 시 생성된 `https://<project-name>.vercel.app` 주소로 접속 (실제 할당된 도메인 사용)
+3. GitHub의 Production Branch에 변경을 push한 뒤 새 배포가 생성되는지 확인
 
-### 5. 사이트 이름 변경
+### 5. 사이트 주소 확인
 
-1. `Site configuration` → `Site details`
-2. `Change site name` 클릭
-3. 원하는 이름 입력: `pwd-week3-<username>`
-4. 새 URL: `https://pwd-week3-<username>.netlify.app`
+1. 프로젝트의 `Settings` → `Domains`에서 실제 도메인 확인
+2. 실제 사이트 origin을 백엔드 CORS 허용 목록에 등록
+3. Preview 배포에서도 제보를 테스트한다면 해당 origin도 백엔드에서 허용
 
-### 6. Forms 확인
+### 6. 제보 확인
 
-1. Netlify 대시보드 → `Forms` 탭
-2. `restaurant-submit` 폼이 보이면 성공!
-3. 테스트 제출 후 데이터 확인
+1. 배포한 사이트에서 테스트 제보 제출
+2. 개발자 도구의 Network에서 `POST /api/submissions` 요청 주소와 성공 응답 확인
+3. 백엔드의 저장 데이터 또는 실제 저장소의 제보 관리 화면에서 제출한 항목 확인
 
 ---
 
 ## 🐛 트러블슈팅
 
-### 문제 1: Netlify 배포 실패
+### 문제 1: Vercel 배포 실패
 
-```
-Deploy directory 'dist' does not exist
+```text
+빌드 결과 디렉터리 dist를 찾을 수 없음
 
 # 해결방법
-1. Netlify 대시보드 → Site configuration
-2. Build & deploy → Build settings
-3. Publish directory를 'build'로 변경
-4. Save → Retry deploy
+1. Vercel 프로젝트의 빌드 설정 확인
+2. Root Directory가 package.json이 있는 폴더인지 확인
+3. Build Command를 'npm run build', Output Directory를 'dist'로 설정
+4. 빌드 로그의 오류 수정 후 재배포
 ```
 
-### 문제 2: Forms가 작동하지 않음
+### 문제 2: 제보가 작동하지 않음
 
-```html
-<!-- public/index.html 확인 -->
-<!-- 1. 숨겨진 폼이 있는지 -->
-<!-- 2. netlify 속성이 있는지 -->
-<!-- 3. form name이 일치하는지 -->
-```
+1. VITE_API_BASE_URL이 실제 HTTPS 백엔드 주소인지 확인
+2. 백엔드의 POST /api/submissions 구현과 저장 상태 확인
+3. 백엔드에서 실제 프런트엔드 origin과 OPTIONS 요청을 허용했는지 확인
+4. Vercel 환경변수 변경 후 새 배포 실행 (빌드 시 반영됨)
 
 ## 💬 도움 & 질문
 - [Practical Web Service TA] (https://chatgpt.com/g/g-68bbbf3aa57081919811dd57100b1e46-ajou-digtalmedia-practical-web-service-ta)
@@ -1877,7 +1875,7 @@ Deploy directory 'dist' does not exist
 ### 공식 문서
 - [React 공식 문서](https://react.dev)
 - [React Router 문서](https://reactrouter.com)
-- [Netlify 문서](https://docs.netlify.com)
+- [Vercel 문서](https://vercel.com/docs/frameworks/frontend/vite)
 
 ### 추천 강의
 - [생활코딩 React](https://opentutorials.org/course/4900)
@@ -1885,16 +1883,16 @@ Deploy directory 'dist' does not exist
 
 ## 📝 제출 방법
 ### 마감일
-- 9월 21일 11시 59분 까지
+- 2026년 10월 18일 23:59까지 (한국시간)
 ### GitHub URL 
-(예: https://github.com/<username>/pwd-week3)
-### Netlify App URL 
-(예: https://pwd-week3-<username>.netlify.app)
+(예: https://github.com/<username>/pwd-week5)
+### Vercel App URL
+(예: https://<project-name>.vercel.app)
 ### 실습 체크리스트
 - GitHub 저장소에 프로젝트 버전 관리가 바르게 되고 있는가?
 - React로 개발한 컴포넌트와 페이지들이 모두 바르게 동작하는가?
-- Netlify에 GitHub 저장소가 연결되어 자동 배포가 이루어 지고 있는가?
-- 맛집 정보 제출 시 Netlify 서버에 데이터가 잘 제출 되었는가?
+- Vercel에 GitHub 저장소가 연결되어 자동 배포가 이루어 지고 있는가?
+- 맛집 정보 제출 시 연결한 백엔드 API에 데이터가 잘 제출 되었는가?
 
 
 ## 🎉 축하합니다!
@@ -1903,11 +1901,11 @@ Deploy directory 'dist' does not exist
 - ✨ React로 실제 작동하는 웹 서비스를 만들었습니다
 - ✨ 주요 React 라이브러리를 사용할 수 있습니다
 - ✨ Git과 GitHub를 활용할 수 있습니다
-- ✨ Netlify로 웹사이트를 배포할 수 있습니다
+- ✨ Vercel로 웹사이트를 배포할 수 있습니다
 
 **다음 주**: Node.js와 Express로 백엔드 API 만들기
 
 ---
 
-*Last Updated: 2025.09-15*  
+*Last Updated: 2026.09.23*\
 *Created by: Hyunseok Oh - Ajou Digital Media Practical Web Service*
