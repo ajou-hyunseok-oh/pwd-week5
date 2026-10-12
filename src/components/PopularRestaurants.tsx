@@ -1,7 +1,11 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { FaTrophy, FaStar } from 'react-icons/fa';
+import type { Restaurant } from '../types';
+
+interface PopularRestaurantsProps {
+  restaurants: Restaurant[];
+}
 
 const Container = styled.div`
   padding: 2rem 0;
@@ -68,8 +72,8 @@ const Rating = styled.div`
   color: #666;
 `;
 
-function PopularRestaurants({ restaurants }) {
-  const getRankIcon = (rank) => {
+function PopularRestaurants({ restaurants }: PopularRestaurantsProps) {
+  const getRankIcon = (rank: number) => {
     if (rank === 0) return <FaTrophy color="gold" />;
     if (rank === 1) return <FaTrophy color="silver" />;
     if (rank === 2) return <FaTrophy color="#CD7F32" />;

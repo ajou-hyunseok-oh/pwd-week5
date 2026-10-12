@@ -1,4 +1,3 @@
-import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import styled from '@emotion/styled';
@@ -53,12 +52,16 @@ const MenuList = styled.ul`
 `;
 
 function DetailPage() {
-  const { id } = useParams();
+  const { id } = useParams<'id'>();
   const navigate = useNavigate();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['restaurant', id],
-    queryFn: () => restaurantAPI.getRestaurantById(id),
+    queryFn: () => {
+      if (id === undefined) throw new Error('맛집 ID가 없습니다.');
+      return restaurantAPI.getRestaurantById(id);
+    },
+    enabled: id !== undefined,
   });
 
   if (isLoading) {

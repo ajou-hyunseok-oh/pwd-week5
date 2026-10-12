@@ -1,8 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import styled from '@emotion/styled';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { submissionAPI, restaurantAPI } from '../services/api';
 import { toast } from 'react-toastify';
+import type { CreateRestaurantInput, Submission, SubmissionStatus } from '../types';
+
+type StatusFilter = SubmissionStatus | 'all';
 
 const Container = styled.div`
   padding: 2rem 0;
@@ -18,7 +21,7 @@ const Controls = styled.div`
   margin-bottom: 1rem;
 `;
 
-const FilterButton = styled.button`
+const FilterButton = styled.button<{ $active: boolean }>`
   padding: 0.4rem 0.75rem;
   border: 1px solid #ddd;
   border-radius: 6px;
@@ -57,7 +60,7 @@ const Danger = styled(Button)`
 
 function SubmissionsPage() {
   const queryClient = useQueryClient();
-  const [status, setStatus] = useState('pending');
+  const [status, setStatus] = useState<StatusFilter>('pending');
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['submissions', status],
@@ -67,8 +70,8 @@ function SubmissionsPage() {
   const items = data?.data || [];
 
   const approveMutation = useMutation({
-    mutationFn: async (submission) => {
-      const payload = {
+    mutationFn: async (submission: Submission) => {
+      const payload: CreateRestaurantInput = {
         name: submission.restaurantName,
         category: submission.category,
         location: submission.location,
@@ -87,7 +90,7 @@ function SubmissionsPage() {
   });
 
   const rejectMutation = useMutation({
-    mutationFn: ({ id }) => submissionAPI.updateSubmission(id, { status: 'rejected' }),
+    mutationFn: ({ id }: Pick<Submission, 'id'>) => submissionAPI.updateSubmission(id, { status: 'rejected' }),
     onSuccess: () => {
       toast.info('제보를 거절했습니다.');
       queryClient.invalidateQueries({ queryKey: ['submissions'] });
@@ -95,14 +98,14 @@ function SubmissionsPage() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => submissionAPI.deleteSubmission(id),
+    mutationFn: submissionAPI.deleteSubmission,
     onSuccess: () => {
       toast.info('제보를 삭제했습니다.');
       queryClient.invalidateQueries({ queryKey: ['submissions'] });
     }
   });
 
-  const statuses = useMemo(() => [
+  const statuses = useMemo<{ key: StatusFilter; label: string }[]>(() => [
     { key: 'pending', label: '대기' },
     { key: 'approved', label: '승인' },
     { key: 'rejected', label: '거절' },

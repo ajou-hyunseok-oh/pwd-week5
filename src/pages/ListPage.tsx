@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import RestaurantList from '../components/RestaurantList';
@@ -19,11 +19,11 @@ const FilterContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const FilterButton = styled.button`
+const FilterButton = styled.button<{ $active: boolean }>`
   padding: 0.5rem 1rem;
   border: 2px solid #667eea;
-  background: ${props => props.active ? '#667eea' : 'white'};
-  color: ${props => props.active ? 'white' : '#667eea'};
+  background: ${props => props.$active ? '#667eea' : 'white'};
+  color: ${props => props.$active ? 'white' : '#667eea'};
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.3s;
@@ -69,7 +69,7 @@ function ListPage() {
         {categories.map(category => (
           <FilterButton
             key={category}
-            active={selectedCategory === category}
+            $active={selectedCategory === category}
             onClick={() => setSelectedCategory(category)}
           >
             {category}

@@ -1,0 +1,13 @@
+
+> pwd-week5@0.0.0 build
+> tsc -b && vite build
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 169 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.73 kB │ gzip:   0.49 kB
+dist/assets/index-D6fv-b65.css   15.39 kB │ gzip:   3.13 kB
+dist/assets/index-ValfddkZ.js   423.59 kB │ gzip: 137.89 kB
+✓ built in 1.00s

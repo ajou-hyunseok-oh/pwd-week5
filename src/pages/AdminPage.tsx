@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import styled from '@emotion/styled';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { restaurantAPI } from '../services/api';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import type { CreateRestaurantInput, Restaurant, RestaurantFormValues, UpdateRestaurantInput } from '../types';
 
 const Container = styled.div`
   padding: 2rem 0;
@@ -85,7 +86,7 @@ const Select = styled.select`
 
 function AdminPage() {
   const queryClient = useQueryClient();
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState<Restaurant | null>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['restaurants'],
@@ -100,7 +101,7 @@ function AdminPage() {
     reset,
     setValue,
     formState: { isSubmitting },
-  } = useForm();
+  } = useForm<RestaurantFormValues>();
 
   const createMutation = useMutation({
     mutationFn: restaurantAPI.createRestaurant,
@@ -112,7 +113,8 @@ function AdminPage() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, payload }) => restaurantAPI.updateRestaurant(id, payload),
+    mutationFn: ({ id, payload }: { id: Restaurant['id']; payload: UpdateRestaurantInput }) =>
+      restaurantAPI.updateRestaurant(id, payload),
     onSuccess: () => {
       toast.success('수정 완료');
       queryClient.invalidateQueries({ queryKey: ['restaurants'] });
@@ -120,7 +122,7 @@ function AdminPage() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => restaurantAPI.deleteRestaurant(id),
+    mutationFn: restaurantAPI.deleteRestaurant,
     onSuccess: () => {
       toast.info('삭제 완료');
       queryClient.invalidateQueries({ queryKey: ['restaurants'] });
@@ -128,7 +130,7 @@ function AdminPage() {
     },
   });
 
-  const onEdit = (row) => {
+  const onEdit = (row: Restaurant) => {
     setSelected(row);
     setValue('name', row.name);
     setValue('category', row.category);
@@ -145,19 +147,19 @@ function AdminPage() {
     reset();
   };
 
-  const onSubmit = async (form) => {
+  const onSubmit = async (form: RestaurantFormValues) => {
     const recommendedMenu = typeof form.recommendedMenu === 'string'
       ? form.recommendedMenu.split(/[\n,]/).map((s) => s.trim()).filter(Boolean)
       : [];
 
-    const payload = {
+    const payload: CreateRestaurantInput = {
       name: form.name?.trim(),
       category: form.category,
       location: form.location?.trim(),
       priceRange: form.priceRange?.trim() || undefined,
-      rating: form.rating !== '' && form.rating !== undefined ? Number(form.rating) : undefined,
+      rating: form.rating !== '' && form.rating !== undefined ? Number(form.rating) : 0,
       description: form.description?.trim() || undefined,
-      recommendedMenu: recommendedMenu.length ? recommendedMenu : undefined,
+      recommendedMenu,
       image: form.image?.trim() || undefined,
     };
 
@@ -168,7 +170,7 @@ function AdminPage() {
     }
   };
 
-  const onDelete = async (row) => {
+  const onDelete = async (row: Restaurant) => {
     if (!confirm(`[삭제] ${row.name}을(를) 삭제할까요?`)) return;
     await deleteMutation.mutateAsync(row.id);
   };

@@ -1,0 +1,88 @@
+{
+  "reviewDate": "2026-10-12",
+  "environment": {
+    "os": "macOS arm64",
+    "node": "24.21.0",
+    "npm": "11.20.0",
+    "browser": "Chromium headless (Playwright)"
+  },
+  "versions": {
+    "readme": {
+      "react": "19.3.0",
+      "react-dom": "19.3.0",
+      "react-router-dom": "7.18.4",
+      "@tanstack/react-query": "5.104.2",
+      "react-hook-form": "7.90.0",
+      "vite": "7.3.7",
+      "typescript": "5.9.3",
+      "eslint": "9.39.5",
+      "@vitejs/plugin-react-swc": "4.3.3"
+    },
+    "repository": {
+      "react": "19.1.1",
+      "react-dom": "19.1.1",
+      "react-router-dom": "7.9.1",
+      "@tanstack/react-query": "5.87.4",
+      "react-hook-form": "7.62.0",
+      "vite": "7.1.5",
+      "typescript": "5.9.3",
+      "eslint": "9.35.0",
+      "@vitejs/plugin-react-swc": "4.0.1"
+    }
+  },
+  "before": {
+    "browserChecks": 32,
+    "passed": 26,
+    "failed": 6
+  },
+  "after": {
+    "browserChecks": 40,
+    "passed": 40,
+    "failed": 0,
+    "readmeAudit": 0,
+    "repositoryAudit": {
+      "moderate": 4,
+      "high": 19,
+      "total": 23
+    }
+  },
+  "testedCommands": {
+    "readme": [
+      "npm create vite@7.1.2 . -- --template react-swc-ts",
+      "npm install",
+      "npm run typecheck",
+      "npm run lint",
+      "npm run build",
+      "npm run preview"
+    ],
+    "repository": [
+      "npm ci",
+      "npm run typecheck",
+      "npm run lint",
+      "npm run build",
+      "npm run preview"
+    ],
+    "readmeCleanReinstall": [
+      "npm ci",
+      "npm run build"
+    ]
+  },
+  "readmeExtraction": {
+    "files": 23,
+    "cssIncluded": true,
+    "sharedNodeModules": false,
+    "requiredConfigFiles": [
+      "tsconfig.json",
+      "tsconfig.app.json",
+      "tsconfig.node.json",
+      "vite.config.ts",
+      "eslint.config.ts"
+    ]
+  },
+  "notVerified": [
+    "Actual Vercel account deployment",
+    "GitHub push and Vercel automatic deployment",
+    "Linux or Windows execution",
+    "Mobile device hardware; viewport emulation only"
+  ]
+}

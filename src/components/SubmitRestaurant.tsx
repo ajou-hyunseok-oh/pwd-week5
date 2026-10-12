@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { toast } from 'react-toastify';
 import { submissionAPI } from '../services/api';
 import { FaCheckCircle } from 'react-icons/fa';
+import type { CreateSubmissionInput, SubmissionFormValues } from '../types';
 
 const FormContainer = styled.div`
   background: white;
@@ -121,20 +122,18 @@ const SuccessMessage = styled.div`
 
 function SubmitRestaurant() {
   const [submitted, setSubmitted] = useState(false);
-  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<SubmissionFormValues>();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: SubmissionFormValues) => {
     try {
       const recommendedMenuArray = typeof data.recommendedMenu === 'string'
         ? data.recommendedMenu
             .split(/[\n,]/)
             .map((item) => item.trim())
             .filter(Boolean)
-        : Array.isArray(data.recommendedMenu)
-          ? data.recommendedMenu
-          : [];
+        : [];
 
-      const payload = {
+      const payload: CreateSubmissionInput = {
         restaurantName: data.restaurantName?.trim(),
         category: data.category,
         location: data.location?.trim(),

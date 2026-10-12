@@ -1,0 +1,289 @@
+{
+  "targets": [
+    {
+      "name": "readme",
+      "checks": [
+        {
+          "name": "home and global CSS",
+          "passed": true
+        },
+        {
+          "name": "list, category filters, empty state",
+          "passed": true
+        },
+        {
+          "name": "like, reload persistence, unlike",
+          "passed": true
+        },
+        {
+          "name": "external images or local fallback load",
+          "passed": true,
+          "detail": [
+            {
+              "url": "https://mblogthumb-phinf.pstatic.net/MjAyMjA2MTJfODEg/MDAxNjU0OTYzNTM3MjE1.1BfmrmOsz_B6DBHAnhQSs6qfNIDnssofR-DrzMfigIIg.JHHDheG6ifJjtfKUqLss_mLXWFE9fNJ5BmepNUVXSOog.PNG.cary63/image.png?type=w966",
+              "width": 966
+            },
+            {
+              "url": "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNTA4MTJfMjcg%2FMDAxNzU0OTQ5ODk1Mjg0.GR6i3mNpJJXyqQrozGEJ65InCDBGlEmxc0aCeVHncJgg.sduDPX67J8hhoGxq4vLohpS4dXk1w-706dQLPfVs1iwg.JPEG%2Foutput%25A3%25DF1564208956.jpg",
+              "width": 900
+            },
+            {
+              "url": "https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20190707_63%2F1562462598960nPDMy_JPEG%2FW7iKQEhTMzCF3flC1t0pzgzF.jpeg.jpg",
+              "width": 960
+            }
+          ]
+        },
+        {
+          "name": "detail direct URL and refresh",
+          "passed": true
+        },
+        {
+          "name": "missing restaurant and 404",
+          "passed": true
+        },
+        {
+          "name": "popular data sorted",
+          "passed": true
+        },
+        {
+          "name": "required form fields",
+          "passed": true
+        },
+        {
+          "name": "submit, trim, menu split and reload persistence",
+          "passed": true
+        },
+        {
+          "name": "new browser does not share submissions",
+          "passed": true
+        },
+        {
+          "name": "minimal submission with optional fields empty",
+          "passed": true
+        },
+        {
+          "name": "submission write failure reports only error",
+          "passed": true
+        },
+        {
+          "name": "like write failure reports only error",
+          "passed": true
+        },
+        {
+          "name": "mobile width 375px without horizontal overflow",
+          "passed": true,
+          "detail": {
+            "viewport": 375,
+            "document": 375
+          }
+        },
+        {
+          "name": "mobile form accessible at 320px",
+          "passed": true,
+          "detail": {
+            "viewport": 320,
+            "document": 320
+          }
+        },
+        {
+          "name": "mobile core routes at 320px",
+          "passed": true,
+          "detail": [
+            {
+              "route": "/",
+              "viewport": 320,
+              "document": 320
+            },
+            {
+              "route": "/list",
+              "viewport": 320,
+              "document": 320
+            },
+            {
+              "route": "/popular",
+              "viewport": 320,
+              "document": 320
+            },
+            {
+              "route": "/restaurant/1",
+              "viewport": 320,
+              "document": 320
+            },
+            {
+              "route": "/submit",
+              "viewport": 320,
+              "document": 320
+            },
+            {
+              "route": "/missing",
+              "viewport": 320,
+              "document": 320
+            }
+          ]
+        },
+        {
+          "name": "like second-write failure rolls back first key",
+          "passed": true
+        },
+        {
+          "name": "unlike second-write failure retains persisted like",
+          "passed": true
+        },
+        {
+          "name": "invalid saved restaurant data shows error",
+          "passed": true
+        },
+        {
+          "name": "no backend dependencies or JS crashes",
+          "passed": true
+        }
+      ],
+      "pageErrors": [],
+      "imageFailures": [],
+      "backendRequests": []
+    },
+    {
+      "name": "repository",
+      "checks": [
+        {
+          "name": "home and global CSS",
+          "passed": true
+        },
+        {
+          "name": "list, category filters, empty state",
+          "passed": true
+        },
+        {
+          "name": "like, reload persistence, unlike",
+          "passed": true
+        },
+        {
+          "name": "external images or local fallback load",
+          "passed": true,
+          "detail": [
+            {
+              "url": "https://mblogthumb-phinf.pstatic.net/MjAyMjA2MTJfODEg/MDAxNjU0OTYzNTM3MjE1.1BfmrmOsz_B6DBHAnhQSs6qfNIDnssofR-DrzMfigIIg.JHHDheG6ifJjtfKUqLss_mLXWFE9fNJ5BmepNUVXSOog.PNG.cary63/image.png?type=w966",
+              "width": 966
+            },
+            {
+              "url": "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNTA4MTJfMjcg%2FMDAxNzU0OTQ5ODk1Mjg0.GR6i3mNpJJXyqQrozGEJ65InCDBGlEmxc0aCeVHncJgg.sduDPX67J8hhoGxq4vLohpS4dXk1w-706dQLPfVs1iwg.JPEG%2Foutput%25A3%25DF1564208956.jpg",
+              "width": 900
+            },
+            {
+              "url": "https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20190707_63%2F1562462598960nPDMy_JPEG%2FW7iKQEhTMzCF3flC1t0pzgzF.jpeg.jpg",
+              "width": 960
+            }
+          ]
+        },
+        {
+          "name": "detail direct URL and refresh",
+          "passed": true
+        },
+        {
+          "name": "missing restaurant and 404",
+          "passed": true
+        },
+        {
+          "name": "popular data sorted",
+          "passed": true
+        },
+        {
+          "name": "required form fields",
+          "passed": true
+        },
+        {
+          "name": "submit, trim, menu split and reload persistence",
+          "passed": true
+        },
+        {
+          "name": "new browser does not share submissions",
+          "passed": true
+        },
+        {
+          "name": "minimal submission with optional fields empty",
+          "passed": true
+        },
+        {
+          "name": "submission write failure reports only error",
+          "passed": true
+        },
+        {
+          "name": "like write failure reports only error",
+          "passed": true
+        },
+        {
+          "name": "mobile width 375px without horizontal overflow",
+          "passed": true,
+          "detail": {
+            "viewport": 375,
+            "document": 375
+          }
+        },
+        {
+          "name": "mobile form accessible at 320px",
+          "passed": true,
+          "detail": {
+            "viewport": 320,
+            "document": 320
+          }
+        },
+        {
+          "name": "mobile core routes at 320px",
+          "passed": true,
+          "detail": [
+            {
+              "route": "/",
+              "viewport": 320,
+              "document": 320
+            },
+            {
+              "route": "/list",
+              "viewport": 320,
+              "document": 320
+            },
+            {
+              "route": "/popular",
+              "viewport": 320,
+              "document": 320
+            },
+            {
+              "route": "/restaurant/1",
+              "viewport": 320,
+              "document": 320
+            },
+            {
+              "route": "/submit",
+              "viewport": 320,
+              "document": 320
+            },
+            {
+              "route": "/missing",
+              "viewport": 320,
+              "document": 320
+            }
+          ]
+        },
+        {
+          "name": "like second-write failure rolls back first key",
+          "passed": true
+        },
+        {
+          "name": "unlike second-write failure retains persisted like",
+          "passed": true
+        },
+        {
+          "name": "invalid saved restaurant data shows error",
+          "passed": true
+        },
+        {
+          "name": "no backend dependencies or JS crashes",
+          "passed": true
+        }
+      ],
+      "pageErrors": [],
+      "imageFailures": [],
+      "backendRequests": []
+    }
+  ],
+  "timestamp": "2026-10-12T13:20:54.790Z"
+}

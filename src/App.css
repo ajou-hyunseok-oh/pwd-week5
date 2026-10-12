@@ -26,6 +26,12 @@ body {
   width: 100%;
 }
 
+@media (max-width: 600px) {
+  .main-content {
+    padding: 1rem;
+  }
+}
+
 /* 기본 버튼 스타일 */
 button {
   padding: 0.5rem 1rem;

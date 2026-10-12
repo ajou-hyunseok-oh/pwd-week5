@@ -20,13 +20,13 @@
 - 📱 반응형 디자인
 
 ### 사용 기술
-- **Frontend**: React 19.1
+- **Frontend**: React 19 + TypeScript (strict 모드)
 - **Vite**: Build Tool
 - **Routing**: React Router v7
 - **Styling**: Emotion (CSS-in-JS)
 - **Forms**: React Hook Form
 - **State**: useState, useEffect
-- **API**: Axios, React Query
+- **Data**: 가상 맛집 데이터, LocalStorage, React Query
 - **Deployment**: Vercel
 
 ---
@@ -46,7 +46,7 @@ npm --version
 
 > ⚠️ Node.js가 없다면 [nodejs.org](https://nodejs.org)에서 24.x LTS 버전을 다운로드하세요.
 
-검증 환경: Node.js 24.21.0 / npm 11.19.0 (2026년 9월 23일).
+검증 환경: Node.js 24.21.0 / npm 11.20.0 (2026년 10월 12일). 명령 예제는 macOS·Linux 터미널 또는 Windows의 Git Bash를 기준으로 합니다.
 
 #### Git 설치 확인
 ```bash
@@ -70,27 +70,62 @@ git --version
 
 ## 🚀 프로젝트 시작하기
 
-### Step 1: React + Vite 프로젝트 개발환경 구축
+**아래 두 경로 중 하나만 선택합니다.** 직접 코드를 작성하는 수업 실습은 A 경로를 사용합니다.
+
+| 경로 | 진행 순서 | 접속 주소 예시 |
+| --- | --- | --- |
+| A. 처음부터 구현 | A-1 프로젝트 생성 → A-2 GitHub 연동 → 라이브러리·설정 적용 → 코드 예제 작성 → Vercel 배포 | `/list`, `/submit` |
+| B. 완성 저장소 실행 | 본인 계정으로 Fork → clone → `npm ci` → 실행·검증 → Vercel 배포 | `/#/list`, `/#/submit` |
+
+README 예제는 `BrowserRouter`, 완성 저장소는 `HashRouter`를 사용하므로 주소가 다릅니다. 완성 저장소에는 관리자 화면도 추가되어 있습니다.
+
+### B. 완성 저장소 실행하기
+
+GitHub에서 이 저장소를 본인 계정으로 Fork합니다. 아래 `YOUR_GITHUB_ID`를 본인 GitHub 아이디로 바꾸고, 프로젝트를 둘 상위 폴더에서 실행합니다. 이미 복제했다면 해당 폴더로 이동해 `npm ci`부터 실행합니다.
 
 ```bash
-# React 프로젝트 폴더 생성성
+git clone https://github.com/YOUR_GITHUB_ID/pwd-week5.git
+cd pwd-week5
+npm ci
+npm run dev
+```
+
+개발 서버는 터미널을 계속 사용합니다. 다음 검증 명령은 **같은 프로젝트 폴더의 새 터미널**에서 실행하거나, 서버를 `Ctrl+C`로 종료한 후 실행합니다.
+
+```bash
+npm run typecheck  # 앱과 설정 파일의 타입 검사
+npm run lint       # TypeScript·React 코드 검사
+npm run build      # 타입 검사 후 dist 빌드
+```
+
+화면 컴포넌트는 `.tsx`, 일반 로직과 설정 파일은 `.ts`를 사용합니다. `tsconfig.app.json`은 브라우저 코드를, `tsconfig.node.json`은 Vite·ESLint 설정을 검사합니다. [Vite는 타입 검사를 별도로 실행해야 하므로](https://vite.dev/guide/features.html#typescript), `build`에 `tsc -b`를 포함했습니다.
+
+B 경로는 아래 A-1·A-2와 코드 예제 복사를 생략하고 **Vercel 배포**로 이동합니다. `npm ci`는 포함된 lockfile의 버전을 재현합니다. [npm ci 문서](https://docs.npmjs.com/cli/v11/commands/npm-ci/)
+
+### A-1. React + TypeScript + Vite 프로젝트 개발환경 구축
+
+```bash
+# 새 프로젝트 폴더 생성 (이미 존재하는 프로젝트에서는 다시 실행하지 않음)
 mkdir pwd-week5
 
 # 프로젝트 폴더로 이동
 cd pwd-week5
 
-# React + JavaScript + SWC 템플릿 생성 (실습 설정과 일치하는 버전)
-npm create vite@7.1.2 . -- --template react-swc
+# React + TypeScript + SWC 템플릿 생성 (실습 설정과 일치하는 버전)
+npm create vite@7.1.2 . -- --template react-swc-ts
 
 # 의존성 설치 및 개발 서버 실행
 npm install
 npm run dev
 ```
 
-> 💡 터미널에 표시된 주소(기본 http://localhost:5173)를 열면 됩니다. 처음에는 Vite 기본 화면이 표시되며, 아래 핵심 컴포넌트 구현을 적용하면 맛집 화면으로 바뀝니다.
+> 💡 터미널에 표시된 주소(기본 http://localhost:5173)를 열면 됩니다. 처음에는 Vite 기본 화면이 표시되며, 아래 핵심 컴포넌트 구현을 적용하면 맛집 화면으로 바뀝니다. 확인을 마쳤으면 `Ctrl+C`로 서버를 종료한 뒤 다음 단계로 진행합니다.
 
-### Step 2: 프로젝트 GitHub 저장소 연동
-// 깃허브 접속 후 pwd-week5 저장소 생성 후
+### A-2. 프로젝트 GitHub 저장소 연동
+
+GitHub에서 본인 소유의 **빈** `pwd-week5` 저장소를 만듭니다. 생성 시 README·라이선스·`.gitignore`를 추가하지 않습니다. 아래 `YOUR_GITHUB_ID`는 본인 아이디로 바꿉니다. [GitHub의 로컬 프로젝트 업로드 안내](https://docs.github.com/en/migrations/importing-source-code/using-the-command-line-to-import-source-code/adding-locally-hosted-code-to-github)
+
+터미널의 현재 폴더가 `package.json`이 있는 `pwd-week5`인지 확인합니다. 커밋할 때 사용자 정보 오류가 나면 `git config user.name "본인 이름"`, `git config user.email "GitHub에 등록한 이메일"`로 이 저장소의 작성자를 설정합니다.
 
 ```bash
 # 현재 폴더를 Git 저장소(Repository)로 초기화(Initialize)
@@ -106,14 +141,14 @@ git commit -m "Init pwd-week5 : React + Vite app"
 git branch -m main
 
 # 원격(Remote) 저장소 'origin' 등록 (GitHub URL로 연결)
-git remote add origin https://github.com/<username>/pwd-week5.git
+git remote add origin https://github.com/YOUR_GITHUB_ID/pwd-week5.git
 
 # 로컬 main을 원격 origin/main으로 최초 푸시(Push) (-u: 업스트림(Upstream) 설정)
 #  → 이후에는 git push 만으로도 동일 브랜치에 푸시 가능
 git push -u origin main
 ```
 
-// 이후 코드 수정 시
+이후 코드 수정 사항도 커밋·push해야 GitHub와 Vercel에 반영됩니다.
 ```bash
 git add .
 
@@ -129,16 +164,20 @@ git push -u origin main
 
 | 라이브러리 | 용도 | 버전 |
 |-----------|------|------|
-| react-dom | Dom 관리 | ^19.1.1 |
+| react-dom | DOM 렌더링 | ^19.1.1 |
 | react-router-dom | 페이지 라우팅 | ^7.9.1 |
-| axios | HTTP 통신 | ^1.12.1 |
+| axios | 후속 HTTP 통신 실습용; 현재 예제에서는 사용하지 않음 | ^1.12.1 |
 | react-hook-form | 폼 관리 | ^7.62.0 |
-| @emotion/react | CSS-in-JS | ^11.11.0
-| @tanstack/react-query |서버 상태 관리 | ^5.87.4 | |
+| @emotion/react | CSS-in-JS | ^11.14.0 |
+| @emotion/styled | 스타일 컴포넌트 | ^11.14.1 |
+| @tanstack/react-query | 비동기 데이터와 캐시 관리 | ^5.87.4 |
+| typescript | 정적 타입 검사 | ~5.9.3 |
 | react-icons | 아이콘 | ^5.5.0 |
 | react-toastify | 알림 메시지 | ^11.0.5 |
 | react-spinners | 로딩 애니메이션 | ^0.17.0 |
 ---
+
+A 경로에서는 프로젝트 루트의 **`package.json` 전체 내용을 아래 JSON으로 교체**합니다. 코드 블록을 감싼 백틱 표시는 파일에 포함하지 않습니다.
 
 `package.json`
 
@@ -148,30 +187,29 @@ git push -u origin main
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "engines": {
-    "node": "24.x"
-  },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@tanstack/react-query": "^5.87.4",
     "axios": "^1.12.1",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
     "react-hook-form": "^7.62.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.9.1",
     "react-spinners": "^0.17.0",
-    "react-toastify": "^11.0.5"    
+    "react-toastify": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
+    "@types/node": "^24.19.2",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react-swc": "^4.0.0",
@@ -179,18 +217,37 @@ git push -u origin main
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "jiti": "^2.7.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.71.1",
     "vite": "^7.1.2"
+  },
+  "engines": {
+    "node": "24.x"
   }
 }
 ```
 
 ### 한 번에 모두 설치하기
 
-새로 작성한 프로젝트는 아래 명령으로 설치합니다. 완성 저장소를 복제한 경우에는 제공된 `package-lock.json`의 버전을 재현하도록 `npm ci`를 사용합니다.
+A 경로는 `package.json`을 교체한 뒤 아래 명령을 다시 실행합니다. 이때 생성·갱신되는 `package-lock.json`도 함께 Git에 기록합니다. `^`가 붙은 버전은 호환 범위 내에서 갱신되므로 B 경로의 고정 버전과 다를 수 있습니다. 이후 같은 프로젝트를 다시 설치할 때는 `npm ci`를 사용합니다.
 
 ```bash
 npm install
 ```
+
+다음 다섯 설정 파일도 각 링크의 **전체 내용**으로 프로젝트 루트에 생성하거나 덮어씁니다.
+
+| 파일 | 역할 |
+| --- | --- |
+| [tsconfig.json](tsconfig.json) | 앱·설정 파일의 타입 검사 연결 |
+| [tsconfig.app.json](tsconfig.app.json) | 브라우저 코드의 엄격한 타입 검사 |
+| [tsconfig.node.json](tsconfig.node.json) | Vite·ESLint 설정의 타입 검사 |
+| [vite.config.ts](vite.config.ts) | React SWC 빌드 플러그인 |
+| [eslint.config.ts](eslint.config.ts) | TypeScript·React 린트 |
+
+템플릿이 생성한 `eslint.config.js`는 삭제하고 `eslint.config.ts`만 둡니다. 두 파일이 동시에 있으면 JavaScript 설정이 먼저 선택됩니다. TypeScript로 작성한 ESLint 설정을 읽는 데 필요한 `jiti`도 위 개발 의존성에 포함되어 있습니다. [ESLint 설정 문서](https://eslint.org/docs/latest/use/configure/configuration-files#typescript-configuration-files)
+
 ---
 
 ## 📁 프로젝트 구조
@@ -199,7 +256,7 @@ npm install
 
 ```bash
 # src 폴더 안에 필요한 폴더들 생성
-mkdir src/components src/pages src/services src/styles
+mkdir -p src/components src/pages src/services src/styles src/types
 ```
 
 ### 최종 구조
@@ -208,36 +265,197 @@ mkdir src/components src/pages src/services src/styles
 pwd-week5/
 ├── src/
 │   ├── components/         # 재사용 컴포넌트
-│   │   ├── Header.jsx
-│   │   ├── NotFound.jsx
-│   │   ├── PopularRestaurants.jsx
-│   │   ├── RestaurantCard.jsx
-│   │   ├── RestaurantList.jsx
-│   │   └── SubmitRestaurant.jsx
+│   │   ├── Header.tsx
+│   │   ├── NotFound.tsx
+│   │   ├── PopularRestaurants.tsx
+│   │   ├── RestaurantCard.tsx
+│   │   ├── RestaurantList.tsx
+│   │   └── SubmitRestaurant.tsx
 │   ├── pages/             # 페이지 컴포넌트
-│   │   ├── DetailPage.jxs
-│   │   ├── HomePage.jsx
-│   │   ├── ListPage.jsx
-│   │   ├── PopularPage.jsx
-│   │   └── SubmitPage.jsx
+│   │   ├── AdminPage.tsx
+│   │   ├── SubmissionsPage.tsx
+│   │   ├── DetailPage.tsx
+│   │   ├── HomePage.tsx
+│   │   ├── ListPage.tsx
+│   │   ├── PopularPage.tsx
+│   │   └── SubmitPage.tsx
 │   ├── services/          # API 로직
-│   │   └── api.jsx
+│   │   ├── api.ts
+│   │   ├── storage.ts
+│   │   └── validation.ts
+│   ├── types/            # 공통 데이터·폼·API 타입
+│   │   └── index.ts
 │   ├── styles/            # 스타일
-│   │   └── GlobalStyles.jsx
+│   │   └── GlobalStyles.tsx
 │   ├── App.css           # 기본 스타일
-│   ├── App.js            # 메인 앱
+│   ├── App.tsx            # 메인 앱
 │   ├── index.css         # 기본 스타일
-│   └── main.jsx          # 진입점
+│   └── main.tsx          # 진입점
 ├── .gitignore
 ├── index.html            # 앱 진입 HTML
 ├── package.json
+├── package-lock.json
+├── tsconfig.json
+├── tsconfig.app.json
+├── tsconfig.node.json
+├── eslint.config.ts
+├── vite.config.ts
+├── vercel.json           # 배포 전 추가할 SPA 라우팅 설정
 └── README.md
-└── vite.config.js
 ```
 
 ---
 
 ## 🔧 핵심 컴포넌트 구현
+
+A 경로에서 각 코드 블록 위의 파일명 또는 첫 줄 주석의 경로에 맞춰 파일을 만듭니다. 이미 있는 `main.tsx`, `App.tsx`, CSS, `index.html`은 전체 내용을 교체합니다. 모든 파일을 작성한 뒤 `npm run typecheck`, `npm run lint`, `npm run dev` 순서로 확인합니다. 초기 맛집은 3개이며 인기 화면은 평점순으로 최대 5개를 표시합니다.
+
+### 0. 공통 타입과 저장 데이터 검증
+
+폼에서는 추천 메뉴를 문자열로 입력하고, API에는 문자열 배열로 전달합니다. `EntityId`는 초기 데이터의 숫자 ID와 새 데이터의 UUID를 모두 지원합니다. LocalStorage의 JSON은 `unknown`으로 읽고 실제 구조를 검증합니다.
+
+```ts
+/* src/types/index.ts */
+// 초기 맛집의 숫자 ID와 새로 생성하는 UUID를 함께 지원합니다.
+export type EntityId = number | string;
+
+export interface Restaurant {
+  id: EntityId;
+  name: string;
+  category: string;
+  location: string;
+  priceRange?: string;
+  rating: number;
+  description?: string;
+  recommendedMenu: string[];
+  likes: number;
+  image?: string;
+}
+
+export type CreateRestaurantInput = Omit<Restaurant, 'id' | 'likes' | 'rating' | 'recommendedMenu'> & {
+  rating?: number;
+  recommendedMenu?: string[];
+};
+
+export type UpdateRestaurantInput = Partial<CreateRestaurantInput>;
+
+export type SubmissionStatus = 'pending' | 'approved' | 'rejected';
+
+export interface CreateSubmissionInput {
+  restaurantName: string;
+  category: string;
+  location: string;
+  priceRange?: string;
+  recommendedMenu?: string[];
+  review?: string;
+  submitterName?: string;
+  submitterEmail?: string;
+}
+
+export interface Submission extends CreateSubmissionInput {
+  id: EntityId;
+  status: SubmissionStatus;
+}
+
+export type UpdateSubmissionInput = Partial<Omit<Submission, 'id'>>;
+
+export interface ApiResponse<T> {
+  data: T;
+}
+
+// 폼의 메뉴 입력은 문자열이고, API에 전달할 때 문자열 배열로 변환합니다.
+export interface RestaurantFormValues {
+  name: string;
+  category: string;
+  location: string;
+  priceRange: string;
+  rating: string | number;
+  description: string;
+  recommendedMenu: string;
+  image: string;
+}
+
+export interface SubmissionFormValues {
+  restaurantName: string;
+  category: string;
+  location: string;
+  priceRange: string;
+  recommendedMenu: string;
+  review: string;
+  submitterName: string;
+  submitterEmail: string;
+}
+```
+
+```ts
+/* src/services/storage.ts */
+export function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+// JSON은 실행 시 검증해야 TypeScript 타입과 실제 저장 데이터가 일치합니다.
+export function readStoredValue<T>(
+  key: string,
+  isValid: (value: unknown) => value is T,
+  fallback: T,
+): T {
+  const saved = localStorage.getItem(key);
+  if (saved === null) return structuredClone(fallback);
+  const value: unknown = JSON.parse(saved);
+  if (!isValid(value)) throw new Error('저장된 실습 데이터 형식을 확인해주세요.');
+  return value;
+}
+```
+
+```ts
+/* src/services/validation.ts */
+import type { EntityId, Restaurant, Submission } from '../types';
+import { isRecord } from './storage';
+
+export function isEntityId(value: unknown): value is EntityId {
+  return typeof value === 'string' || (typeof value === 'number' && Number.isFinite(value));
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item: unknown) => typeof item === 'string');
+}
+
+function hasOptionalStrings(value: Record<string, unknown>, keys: string[]): boolean {
+  return keys.every((key) => value[key] === undefined || typeof value[key] === 'string');
+}
+
+export function isRestaurant(value: unknown): value is Restaurant {
+  return isRecord(value)
+    && isEntityId(value.id)
+    && typeof value.name === 'string'
+    && typeof value.category === 'string'
+    && typeof value.location === 'string'
+    && typeof value.rating === 'number' && Number.isFinite(value.rating)
+    && typeof value.likes === 'number' && Number.isFinite(value.likes)
+    && isStringArray(value.recommendedMenu)
+    && hasOptionalStrings(value, ['priceRange', 'description', 'image']);
+}
+
+export function isSubmission(value: unknown): value is Submission {
+  return isRecord(value)
+    && isEntityId(value.id)
+    && typeof value.restaurantName === 'string'
+    && typeof value.category === 'string'
+    && typeof value.location === 'string'
+    && (value.status === 'pending' || value.status === 'approved' || value.status === 'rejected')
+    && (value.recommendedMenu === undefined || isStringArray(value.recommendedMenu))
+    && hasOptionalStrings(value, ['priceRange', 'review', 'submitterName', 'submitterEmail']);
+}
+
+export function isLikedRestaurants(value: unknown): value is EntityId[] {
+  return Array.isArray(value) && value.every(isEntityId);
+}
+
+export function isRestaurantLikes(value: unknown): value is Record<string, number> {
+  return isRecord(value)
+    && Object.values(value).every((count) => typeof count === 'number' && Number.isFinite(count));
+}
+```
 
 ### 1. index.html 수정
 
@@ -255,30 +473,32 @@ pwd-week5/
   <body>
     <noscript>이 앱을 실행하려면 JavaScript를 활성화해야 합니다.</noscript>    
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>      
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
 
 ```
 
 ### 2. 메인 앱 구조
-```jsx
-/* src/main.jsx */
+```tsx
+/* src/main.tsx */
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.jsx'
+import App from './App'
 
-createRoot(document.getElementById('root')).render(
+const root = document.getElementById('root')
+if (!root) throw new Error('앱을 표시할 root 요소를 찾을 수 없습니다.')
+
+createRoot(root).render(
   <StrictMode>
     <App />
   </StrictMode>,
 )
 ```
 
-```jsx
-/* src/App.jsx */
-import React from 'react';
+```tsx
+/* src/App.tsx */
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
@@ -398,6 +618,12 @@ body {
   width: 100%;
 }
 
+@media (max-width: 600px) {
+  .main-content {
+    padding: 1rem;
+  }
+}
+
 /* 기본 버튼 스타일 */
 button {
   padding: 0.5rem 1rem;
@@ -454,8 +680,9 @@ label {
 }
 ```
 
-- @emotion 패키지를 이용한 전역 스타일 적용(src/styles/GlobalStyles.jsx)
-```jsx
+- @emotion 패키지를 이용한 전역 스타일 적용(src/styles/GlobalStyles.tsx)
+```tsx
+/* src/styles/GlobalStyles.tsx */
 /** @jsxImportSource @emotion/react */
 import { Global, css } from '@emotion/react';
 
@@ -485,109 +712,172 @@ export default GlobalStyles;
 ```
 
 
-### 4. 연습용 가상 서버 (src/services/api.jsx)
-```jsx
-import axios from 'axios';
+### 4. 가상 맛집 데이터와 LocalStorage API (src/services/api.ts)
+```ts
+/* src/services/api.ts */
+import type {
+  ApiResponse,
+  CreateRestaurantInput,
+  CreateSubmissionInput,
+  EntityId,
+  Restaurant,
+  Submission,
+  SubmissionStatus,
+  UpdateRestaurantInput,
+  UpdateSubmissionInput,
+} from '../types';
+import { readStoredValue } from './storage';
+import { isRestaurant, isSubmission } from './validation';
 
-// Axios 인스턴스 생성
-const api = axios.create({
-  baseURL: 'https://jsonplaceholder.typicode.com', // 실습용 가짜 API
-  timeout: 10000,
-});
-
-// 요청 인터셉터
-api.interceptors.request.use(
-  (config) => {
-    console.log('API 요청:', config.url);
-    return config;
+// 이번 실습은 백엔드 없이 동작합니다. 초기 데이터는 README의 가상 맛집입니다.
+const initialRestaurants: Restaurant[] = [
+  {
+    id: 1,
+    name: "송림식당",
+    category: "한식",
+    location: "경기 수원시 영통구 월드컵로193번길 21 원천동",
+    priceRange: "7,000-13,000원",
+    rating: 4.99,
+    description: "맛있는 한식 맛집입니다.",
+    recommendedMenu: ["순두부", "김치찌개","소불고기", "제육볶음"],
+    likes: 0,
+    image: "https://mblogthumb-phinf.pstatic.net/MjAyMjA2MTJfODEg/MDAxNjU0OTYzNTM3MjE1.1BfmrmOsz_B6DBHAnhQSs6qfNIDnssofR-DrzMfigIIg.JHHDheG6ifJjtfKUqLss_mLXWFE9fNJ5BmepNUVXSOog.PNG.cary63/image.png?type=w966"
   },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// 응답 인터셉터
-api.interceptors.response.use(
-  (response) => {
-    return response;
+  {
+    id: 2,
+    name: "별미떡볶이",
+    category: "분식",
+    location: "경기 수원시 영통구 아주로 42 아카데미빌딩",
+    priceRange: "7,000-10,000원",
+    rating: 4.98,
+    description: "바삭한 튀김과 함께하는 행복한 한입",
+    recommendedMenu: ["떡볶이", "튀김", "순대", "어묵"],
+    likes: 0,
+    image: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNTA4MTJfMjcg%2FMDAxNzU0OTQ5ODk1Mjg0.GR6i3mNpJJXyqQrozGEJ65InCDBGlEmxc0aCeVHncJgg.sduDPX67J8hhoGxq4vLohpS4dXk1w-706dQLPfVs1iwg.JPEG%2Foutput%25A3%25DF1564208956.jpg"
   },
-  (error) => {
-    console.error('API 에러:', error);
-    return Promise.reject(error);
+  {
+    id: 3,
+    name: "Sogo",
+    category: "일식",
+    location: "경기 수원시 영통구 월드컵로193번길 7",
+    priceRange: "10,000-16,000원",
+    rating: 4.89,
+    description: "일식 맛집, 구 허수아비,",
+    recommendedMenu: ["냉모밀", "김치돈까스나베", "코돈부르"],
+    likes: 0,
+    image: "https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20190707_63%2F1562462598960nPDMy_JPEG%2FW7iKQEhTMzCF3flC1t0pzgzF.jpeg.jpg"
   }
-);
+];
 
-// API 함수들
+const RESTAURANTS_KEY = 'pwd-week5-restaurants';
+const SUBMISSIONS_KEY = 'pwd-week5-submissions';
+
+function readItems<T>(key: string, isItem: (value: unknown) => value is T, fallback: T[] = []): T[] {
+  return readStoredValue(key, (value): value is T[] =>
+    Array.isArray(value) && value.every(isItem), fallback);
+}
+
+function writeItems<T>(key: string, items: T[]): void {
+  // 저장 실패는 호출자에게 전달하여 성공 메시지가 표시되지 않도록 합니다.
+  localStorage.setItem(key, JSON.stringify(items));
+}
+
+function updateItem<T extends { id: EntityId }>(
+  key: string,
+  id: EntityId,
+  payload: Partial<Omit<T, 'id'>>,
+  isItem: (value: unknown) => value is T,
+  fallback: T[] = [],
+): ApiResponse<T> {
+  const items = readItems(key, isItem, fallback);
+  const index = items.findIndex((item) => String(item.id) === String(id));
+  const original = items[index];
+  if (!original) throw new Error('항목을 찾을 수 없습니다.');
+  const updated = { ...original, ...payload, id: original.id };
+  if (!isItem(updated)) throw new Error('수정할 데이터 형식을 확인해주세요.');
+  items[index] = updated;
+  writeItems(key, items);
+  return { data: updated };
+}
+
+function deleteItem<T extends { id: EntityId }>(
+  key: string,
+  id: EntityId,
+  isItem: (value: unknown) => value is T,
+  fallback: T[] = [],
+): number {
+  const items = readItems(key, isItem, fallback);
+  writeItems(key, items.filter((item) => String(item.id) !== String(id)));
+  return 204;
+}
+
+// 기존 페이지가 사용하는 비동기 인터페이스와 { data: ... } 응답을 유지합니다.
 export const restaurantAPI = {
-  // 맛집 목록 가져오기 (가짜 데이터)
-  getRestaurants: async () => {
-    // 실제로는 백엔드 API를 호출하지만, 실습용으로 가짜 데이터 반환
-    return {
-      data: [
-        {
-          id: 1,
-          name: "송림식당",
-          category: "한식",
-          location: "경기 수원시 영통구 월드컵로193번길 21 원천동",
-          priceRange: "7,000-13,000원",
-          rating: 4.99,
-          description: "맛있는 한식 맛집입니다.",
-          recommendedMenu: ["순두부", "김치찌개","소불고기", "제육볶음"],
-          likes: 0,
-          image: "https://mblogthumb-phinf.pstatic.net/MjAyMjA2MTJfODEg/MDAxNjU0OTYzNTM3MjE1.1BfmrmOsz_B6DBHAnhQSs6qfNIDnssofR-DrzMfigIIg.JHHDheG6ifJjtfKUqLss_mLXWFE9fNJ5BmepNUVXSOog.PNG.cary63/image.png?type=w966"
-        },
-        {
-          id: 2,
-          name: "별미떡볶이",
-          category: "분식",
-          location: "경기 수원시 영통구 아주로 42 아카데미빌딩",
-          priceRange: "7,000-10,000원",
-          rating: 4.98,
-          description: "바삭한 튀김과 함께하는 행복한 한입",
-          recommendedMenu: ["떡볶이", "튀김", "순대", "어묵"],
-          likes: 0,
-          image: "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNTA4MTJfMjcg%2FMDAxNzU0OTQ5ODk1Mjg0.GR6i3mNpJJXyqQrozGEJ65InCDBGlEmxc0aCeVHncJgg.sduDPX67J8hhoGxq4vLohpS4dXk1w-706dQLPfVs1iwg.JPEG%2Foutput%25A3%25DF1564208956.jpg"
-        },
-        {
-          id: 3,
-          name: "Sogo",
-          category: "일식",
-          location: "경기 수원시 영통구 월드컵로193번길 7",
-          priceRange: "10,000-16,000원",
-          rating: 4.89,
-          description: "일식 맛집, 구 허수아비,",
-          recommendedMenu: ["냉모밀", "김치돈까스나베", "코돈부르"],
-          likes: 0,
-          image: "https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20190707_63%2F1562462598960nPDMy_JPEG%2FW7iKQEhTMzCF3flC1t0pzgzF.jpeg.jpg"
-        }
-      ]
+  getRestaurants: async (): Promise<ApiResponse<Restaurant[]>> => ({
+    data: readItems(RESTAURANTS_KEY, isRestaurant, initialRestaurants),
+  }),
+
+  getRestaurantById: async (id: EntityId): Promise<ApiResponse<Restaurant | undefined>> => ({
+    data: readItems(RESTAURANTS_KEY, isRestaurant, initialRestaurants)
+      .find((item) => String(item.id) === String(id)),
+  }),
+
+  getPopularRestaurants: async (): Promise<ApiResponse<Restaurant[]>> => ({
+    data: readItems(RESTAURANTS_KEY, isRestaurant, initialRestaurants)
+      .sort((a, b) => b.rating - a.rating).slice(0, 5),
+  }),
+
+  createRestaurant: async (payload: CreateRestaurantInput): Promise<ApiResponse<Restaurant>> => {
+    const items = readItems(RESTAURANTS_KEY, isRestaurant, initialRestaurants);
+    const item: Restaurant = {
+      ...payload,
+      id: crypto.randomUUID(),
+      rating: payload.rating ?? 0,
+      recommendedMenu: payload.recommendedMenu ?? [],
+      likes: 0,
     };
+    writeItems(RESTAURANTS_KEY, [...items, item]);
+    return { data: item };
   },
 
-  // 맛집 상세 정보 가져오기
-  getRestaurantById: async (id) => {
-    const restaurants = await restaurantAPI.getRestaurants();
-    const restaurant = restaurants.data.find(r => r.id === parseInt(id));
-    return { data: restaurant };
-  },
+  updateRestaurant: async (id: EntityId, payload: UpdateRestaurantInput): Promise<ApiResponse<Restaurant>> =>
+    updateItem(RESTAURANTS_KEY, id, {
+      ...payload,
+      ...('rating' in payload ? { rating: payload.rating ?? 0 } : {}),
+      ...('recommendedMenu' in payload ? { recommendedMenu: payload.recommendedMenu ?? [] } : {}),
+    }, isRestaurant, initialRestaurants),
 
-  // 인기 맛집 가져오기
-  getPopularRestaurants: async () => {
-    const restaurants = await restaurantAPI.getRestaurants();
-    const sorted = [...restaurants.data].sort((a, b) => b.rating - a.rating);
-    return { data: sorted.slice(0, 5) };
-  }
+  deleteRestaurant: async (id: EntityId): Promise<number> =>
+    deleteItem(RESTAURANTS_KEY, id, isRestaurant, initialRestaurants),
 };
 
-export default api;
+export const submissionAPI = {
+  createSubmission: async (payload: CreateSubmissionInput): Promise<ApiResponse<Submission>> => {
+    const items = readItems(SUBMISSIONS_KEY, isSubmission);
+    const item: Submission = { ...payload, id: crypto.randomUUID(), status: 'pending' };
+    writeItems(SUBMISSIONS_KEY, [...items, item]);
+    return { data: item };
+  },
+
+  listSubmissions: async (status?: SubmissionStatus): Promise<ApiResponse<Submission[]>> => ({
+    data: readItems(SUBMISSIONS_KEY, isSubmission).filter((item) => !status || item.status === status),
+  }),
+
+  updateSubmission: async (id: EntityId, payload: UpdateSubmissionInput): Promise<ApiResponse<Submission>> =>
+    updateItem(SUBMISSIONS_KEY, id, payload, isSubmission),
+
+  deleteSubmission: async (id: EntityId): Promise<number> =>
+    deleteItem(SUBMISSIONS_KEY, id, isSubmission),
+};
+
+export default restaurantAPI;
 ```
 ---
 
 ### 5. 컴포넌트 (src/components/)
 
-```jsx
-/* src/components/Header.jsx */
-import React from 'react';
+```tsx
+/* src/components/Header.tsx */
 import { Link, useLocation } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { FaHome, FaList, FaFire, FaPlus } from 'react-icons/fa';
@@ -600,7 +890,9 @@ const HeaderContainer = styled.header`
 
 const Nav = styled.nav`
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
+  gap: 0.5rem;
   max-width: 600px;
   margin: 0 auto;
 `;
@@ -625,7 +917,7 @@ const NavLink = styled(Link)`
 function Header() {
   const location = useLocation();
 
-  const isActive = (path) => {
+  const isActive = (path: string) => {
     return location.pathname === path ? 'active' : '';
   };
 
@@ -642,7 +934,7 @@ function Header() {
           <FaList /> List
         </NavLink>
         <NavLink to="/popular" className={isActive('/popular')}>
-          <FaFire /> Popular Top 3
+          <FaFire /> Popular
         </NavLink>
         <NavLink to="/submit" className={isActive('/submit')}>
           <FaPlus /> Submit New restaurant
@@ -655,9 +947,8 @@ function Header() {
 export default Header;
 ```
 
-```jsx
-/* src/components/NotFound.jsx */
-import React from 'react';
+```tsx
+/* src/components/NotFound.tsx */
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { FaExclamationTriangle } from 'react-icons/fa';
@@ -710,12 +1001,16 @@ function NotFound() {
 export default NotFound;
 ```
 
-```jsx
-/* src/components/PopularRestaurants.jsx */
-import React from 'react';
+```tsx
+/* src/components/PopularRestaurants.tsx */
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { FaTrophy, FaStar } from 'react-icons/fa';
+import type { Restaurant } from '../types';
+
+interface PopularRestaurantsProps {
+  restaurants: Restaurant[];
+}
 
 const Container = styled.div`
   padding: 2rem 0;
@@ -782,8 +1077,8 @@ const Rating = styled.div`
   color: #666;
 `;
 
-function PopularRestaurants({ restaurants }) {
-  const getRankIcon = (rank) => {
+function PopularRestaurants({ restaurants }: PopularRestaurantsProps) {
+  const getRankIcon = (rank: number) => {
     if (rank === 0) return <FaTrophy color="gold" />;
     if (rank === 1) return <FaTrophy color="silver" />;
     if (rank === 2) return <FaTrophy color="#CD7F32" />;
@@ -816,13 +1111,21 @@ function PopularRestaurants({ restaurants }) {
 export default PopularRestaurants;
 ```
 
-```jsx
-/* src/components/RestaurantCard.jsx */
-import React, { useState, useEffect } from 'react';
+```tsx
+/* src/components/RestaurantCard.tsx */
+import { useState, useEffect } from 'react';
+import type { MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { FaStar, FaHeart, FaMapMarkerAlt, FaWonSign } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import type { Restaurant } from '../types';
+import { readStoredValue } from '../services/storage';
+import { isLikedRestaurants, isRestaurantLikes } from '../services/validation';
+
+interface RestaurantCardProps {
+  restaurant: Restaurant;
+}
 
 // Styled Components는 그대로 유지
 const Card = styled.div`
@@ -886,7 +1189,7 @@ const ActionRow = styled.div`
 `;
 
 // $liked로 변경 (transient prop)
-const LikeButton = styled.button`
+const LikeButton = styled.button<{ $liked: boolean }>`
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -914,7 +1217,7 @@ const DetailLink = styled(Link)`
   }
 `;
 
-function RestaurantCard({ restaurant }) {
+function RestaurantCard({ restaurant }: RestaurantCardProps) {
   // State 초기화
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(restaurant.likes || 0);
@@ -923,26 +1226,23 @@ function RestaurantCard({ restaurant }) {
   useEffect(() => {
     // 1. 좋아요 여부 복원
     try {
-      const likedRestaurants = JSON.parse(
-        localStorage.getItem('likedRestaurants') || '[]'
-      );
+      const likedRestaurants = readStoredValue('likedRestaurants', isLikedRestaurants, []);
       if (likedRestaurants.includes(restaurant.id)) {
         setLiked(true);
       }
 
       // 2. 좋아요 수 복원
-      const savedLikes = JSON.parse(
-        localStorage.getItem('restaurantLikes') || '{}'
-      );
-      if (savedLikes[restaurant.id] !== undefined) {
-        setLikes(savedLikes[restaurant.id]);
+      const savedLikes = readStoredValue('restaurantLikes', isRestaurantLikes, {});
+      const savedCount = savedLikes[restaurant.id];
+      if (savedCount !== undefined) {
+        setLikes(savedCount);
       }
     } catch (error) {
       console.error('LocalStorage 읽기 오류:', error);
     }
   }, [restaurant.id, restaurant.likes]);
 
-  const handleLike = (e) => {
+  const handleLike = (e: MouseEvent<HTMLButtonElement>) => {
     // 이벤트 전파 방지 (중요!)
     e.preventDefault();
     e.stopPropagation();
@@ -954,38 +1254,46 @@ function RestaurantCard({ restaurant }) {
         ? likes + 1 
         : Math.max(0, likes - 1); // 음수 방지
 
-      // State 업데이트
-      setLiked(newLikedState);
-      setLikes(newLikesCount);
-
-      // LocalStorage 업데이트 - 좋아요 여부
-      const likedRestaurants = JSON.parse(
-        localStorage.getItem('likedRestaurants') || '[]'
-      );
+      // 두 저장값을 먼저 읽고 검증합니다.
+      const previousLikedRestaurants = localStorage.getItem('likedRestaurants');
+      const likedRestaurants = readStoredValue('likedRestaurants', isLikedRestaurants, []);
+      const restaurantLikes = readStoredValue('restaurantLikes', isRestaurantLikes, {});
       
       if (newLikedState) {
         // 좋아요 추가
         if (!likedRestaurants.includes(restaurant.id)) {
           likedRestaurants.push(restaurant.id);
         }
-        toast.success(`${restaurant.name}을(를) 좋아요했습니다! ❤️`);
       } else {
         // 좋아요 취소
         const index = likedRestaurants.indexOf(restaurant.id);
         if (index > -1) {
           likedRestaurants.splice(index, 1);
         }
-        toast.info('좋아요를 취소했습니다.');
       }
       
-      localStorage.setItem('likedRestaurants', JSON.stringify(likedRestaurants));
-
-      // LocalStorage 업데이트 - 좋아요 수
-      const restaurantLikes = JSON.parse(
-        localStorage.getItem('restaurantLikes') || '{}'
-      );
       restaurantLikes[restaurant.id] = newLikesCount;
-      localStorage.setItem('restaurantLikes', JSON.stringify(restaurantLikes));
+      localStorage.setItem('likedRestaurants', JSON.stringify(likedRestaurants));
+      try {
+        localStorage.setItem('restaurantLikes', JSON.stringify(restaurantLikes));
+      } catch (error) {
+        // 두 번째 저장이 실패하면 먼저 저장한 좋아요 여부를 복원합니다.
+        if (previousLikedRestaurants === null) {
+          localStorage.removeItem('likedRestaurants');
+        } else {
+          localStorage.setItem('likedRestaurants', previousLikedRestaurants);
+        }
+        throw error;
+      }
+
+      // 저장이 완료된 뒤에만 화면과 성공 알림을 갱신합니다.
+      setLiked(newLikedState);
+      setLikes(newLikesCount);
+      if (newLikedState) {
+        toast.success(`${restaurant.name}을(를) 좋아요했습니다! ❤️`);
+      } else {
+        toast.info('좋아요를 취소했습니다.');
+      }
 
       // 디버깅용 로그
       console.log('좋아요 업데이트:', {
@@ -1046,15 +1354,19 @@ function RestaurantCard({ restaurant }) {
 export default RestaurantCard;
 ```
 
-```jsx
-/* src/components/RestaurantList.jsx */
-import React from 'react';
+```tsx
+/* src/components/RestaurantList.tsx */
 import styled from '@emotion/styled';
 import RestaurantCard from './RestaurantCard';
+import type { Restaurant } from '../types';
+
+interface RestaurantListProps {
+  restaurants: Restaurant[];
+}
 
 const ListContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   gap: 2rem;
 `;
 
@@ -1064,7 +1376,7 @@ const NoResults = styled.p`
   color: #666;
 `;
 
-function RestaurantList({ restaurants }) {
+function RestaurantList({ restaurants }: RestaurantListProps) {
   if (restaurants.length === 0) {
     return <NoResults>해당 카테고리에 맛집이 없습니다.</NoResults>;
   }
@@ -1081,13 +1393,15 @@ function RestaurantList({ restaurants }) {
 export default RestaurantList;
 ```
 
-```jsx
-/* src/components/SubmitRestaurant.jsx */
-import React, { useState } from 'react';
+```tsx
+/* src/components/SubmitRestaurant.tsx */
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { toast } from 'react-toastify';
+import { submissionAPI } from '../services/api';
 import { FaCheckCircle } from 'react-icons/fa';
+import type { CreateSubmissionInput, SubmissionFormValues } from '../types';
 
 const FormContainer = styled.div`
   background: white;
@@ -1205,23 +1519,29 @@ const SuccessMessage = styled.div`
 
 function SubmitRestaurant() {
   const [submitted, setSubmitted] = useState(false);
-  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<SubmissionFormValues>();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: SubmissionFormValues) => {
     try {
-      // 백엔드 없이 현재 브라우저에 실습 제보 저장
-      const storageKey = 'pwd-week5-submissions';
-      const submissions = JSON.parse(localStorage.getItem(storageKey) || '[]');
-      const submission = {
-        ...data,
-        id: crypto.randomUUID(),
-        status: 'pending',
-        recommendedMenu: data.recommendedMenu
-          .split(/[\n,]/)
-          .map((item) => item.trim())
-          .filter(Boolean)
+      const recommendedMenuArray = typeof data.recommendedMenu === 'string'
+        ? data.recommendedMenu
+            .split(/[\n,]/)
+            .map((item) => item.trim())
+            .filter(Boolean)
+        : [];
+
+      const payload: CreateSubmissionInput = {
+        restaurantName: data.restaurantName?.trim(),
+        category: data.category,
+        location: data.location?.trim(),
+        priceRange: data.priceRange?.trim() || undefined,
+        recommendedMenu: recommendedMenuArray.length ? recommendedMenuArray : undefined,
+        review: data.review?.trim() || undefined,
+        submitterName: data.submitterName?.trim() || undefined,
+        submitterEmail: data.submitterEmail?.trim() || undefined,
       };
-      localStorage.setItem(storageKey, JSON.stringify([...submissions, submission]));
+
+      await submissionAPI.createSubmission(payload);
       setSubmitted(true);
       toast.success('맛집이 성공적으로 제보되었습니다! 🎉');
       reset();
@@ -1322,6 +1642,7 @@ function SubmitRestaurant() {
           />
         </FormGroup>
 
+
         <FormGroup>
           <Label htmlFor="review">한줄평</Label>
           <Textarea
@@ -1370,9 +1691,11 @@ export default SubmitRestaurant;
 ```
 
 ### 6. 페이지 (src/pages/)
-```jsx
-/* src/pages/DetailPage.jsx */
-import React from 'react';
+
+완성 저장소에는 [맛집 관리 화면](src/pages/AdminPage.tsx)과 [제보 승인·거절 화면](src/pages/SubmissionsPage.tsx)도 포함되어 있습니다. 각각 `/#/admin`, `/#/submissions`에서 확인할 수 있습니다. 아래 학습용 예제는 기본 사용자 화면을 구현합니다.
+
+```tsx
+/* src/pages/DetailPage.tsx */
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import styled from '@emotion/styled';
@@ -1427,12 +1750,16 @@ const MenuList = styled.ul`
 `;
 
 function DetailPage() {
-  const { id } = useParams();
+  const { id } = useParams<'id'>();
   const navigate = useNavigate();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['restaurant', id],
-    queryFn: () => restaurantAPI.getRestaurantById(id),
+    queryFn: () => {
+      if (id === undefined) throw new Error('맛집 ID가 없습니다.');
+      return restaurantAPI.getRestaurantById(id);
+    },
+    enabled: id !== undefined,
   });
 
   if (isLoading) {
@@ -1486,9 +1813,8 @@ function DetailPage() {
 export default DetailPage;
 ```
 
-```jsx
-/* src/pages/HomePage.jsx */
-import React from 'react';
+```tsx
+/* src/pages/HomePage.tsx */
 import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { FaMapMarkedAlt, FaUtensils, FaStar } from 'react-icons/fa';
@@ -1556,17 +1882,17 @@ function HomePage() {
           <p>카테고리별로 맛집을 찾아보세요</p>
         </Card>
         
+        <Card to="/submit">
+          <FaUtensils />
+          <h3>맛집 제보하기</h3>
+          <p>새로운 맛집을 알려주세요</p>
+        </Card>
         <Card to="/popular">
           <FaStar />
           <h3>인기 맛집 TOP</h3>
           <p>이번 주 가장 인기있는 맛집</p>
         </Card>
         
-        <Card to="/submit">
-          <FaUtensils />
-          <h3>맛집 제보하기</h3>
-          <p>새로운 맛집을 알려주세요</p>
-        </Card>
       </CardGrid>
     </HomeContainer>
   );
@@ -1575,9 +1901,9 @@ function HomePage() {
 export default HomePage;
 ```
 
-```jsx
-/* src/pages/ListPage.jsx */
-import React, { useState } from 'react';
+```tsx
+/* src/pages/ListPage.tsx */
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import RestaurantList from '../components/RestaurantList';
@@ -1598,11 +1924,11 @@ const FilterContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const FilterButton = styled.button`
+const FilterButton = styled.button<{ $active: boolean }>`
   padding: 0.5rem 1rem;
   border: 2px solid #667eea;
-  background: ${props => props.active ? '#667eea' : 'white'};
-  color: ${props => props.active ? 'white' : '#667eea'};
+  background: ${props => props.$active ? '#667eea' : 'white'};
+  color: ${props => props.$active ? 'white' : '#667eea'};
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.3s;
@@ -1648,7 +1974,7 @@ function ListPage() {
         {categories.map(category => (
           <FilterButton
             key={category}
-            active={selectedCategory === category}
+            $active={selectedCategory === category}
             onClick={() => setSelectedCategory(category)}
           >
             {category}
@@ -1664,9 +1990,8 @@ function ListPage() {
 export default ListPage;
 ```
 
-```jsx
-/* src/pages/PopularPage.jsx */
-import React from 'react';
+```tsx
+/* src/pages/PopularPage.tsx */
 import { useQuery } from '@tanstack/react-query';
 import PopularRestaurants from '../components/PopularRestaurants';
 import { restaurantAPI } from '../services/api';
@@ -1697,9 +2022,8 @@ function PopularPage() {
 export default PopularPage;
 ```
 
-```jsx
-/* src/pages/SubmitPage.jsx */
-import React from 'react';
+```tsx
+/* src/pages/SubmitPage.tsx */
 import SubmitRestaurant from '../components/SubmitRestaurant';
 
 function SubmitPage() {
@@ -1721,48 +2045,15 @@ export default SubmitPage;
 4. 페이지를 새로고침한 뒤에도 같은 키에 제보가 남아 있는지 확인합니다.
 5. 다른 브라우저에서는 해당 제보가 보이지 않는지 확인합니다.
 
-저장한 제보는 같은 브라우저·같은 사이트 주소에서만 유지됩니다. 로컬과 Vercel, Production과 Preview 주소의 데이터는 서로 공유되지 않습니다. 사이트 데이터를 삭제하면 제보도 지워집니다. 서버 저장과 사용자 간 공유는 이후 백엔드·DB 실습에서 다룹니다.
+제보는 `pending` 상태로 저장되며 목록에 자동 추가되지 않습니다. README 기본 실습의 성공 기준은 저장 키 확인입니다. 완성 저장소에서는 `/#/submissions`에서 승인할 수 있습니다. 제보는 서버에 전송되지 않으므로 다른 사람의 컴퓨터에서 제출 내용을 확인할 수 없습니다.
+
+저장한 제보는 같은 브라우저·같은 사이트 주소에서만 유지됩니다. **포트도 주소의 일부**이므로 `localhost:5173`(개발)과 `localhost:4173`(미리보기), `localhost`와 `127.0.0.1` 사이에도 데이터가 공유되지 않습니다. 로컬과 Vercel, Production과 Preview 주소의 데이터는 서로 공유되지 않습니다. 사이트 데이터를 삭제하면 제보도 지워집니다. 서버 저장과 사용자 간 공유는 이후 백엔드·DB 실습에서 다룹니다.
 
 ---
 
 ## 🌐 Vercel 배포
 
-### 1. Vercel 계정 연결
-
-1. [vercel.com](https://vercel.com) 로그인
-2. `Add New` → `Project` 선택
-3. GitHub 저장소 Import 화면으로 이동
-
-### 2. GitHub 연결
-
-1. GitHub 계정 연결
-2. GitHub 저장소 접근 권한 승인
-3. 실습 리포지토리 검색
-4. 리포지토리 선택 후 `Import`
-
-### 3. 빌드 설정
-
-구현을 마친 뒤, Vercel 배포 전에 로컬에서 확인합니다.
-
-```bash
-npm run lint
-npm run build
-npm run preview
-```
-
-터미널에 표시된 미리보기 주소(기본 `http://localhost:4173`)에서 목록·필터·상세·인기·좋아요·제보를 확인합니다. 상세 페이지와 제보 저장 확인은 새로고침 후에도 반복합니다. README 예제는 `/list`, 완성 저장소는 `/#/list` 주소를 사용합니다.
-
-2026년 9월 23일 검증에서 저장소와 README 예제 모두 설치·lint·빌드가 통과했고, 브라우저 검증 22개 항목이 통과했습니다. 백엔드 요청은 0건이었으며, 저장 실패 시 성공 메시지가 표시되지 않는 것도 확인했습니다. 검증 범위는 로컬 빌드 결과이며, 실제 Vercel 배포와 외부 음식 이미지의 가용성은 포함하지 않습니다.
-
-Vercel 빌드 설정은 자동으로 감지되지만, 확인 필요:
-
-- **Framework Preset**: `Vite`
-- **Root Directory**: `package.json`이 있는 프로젝트 루트
-- **Production Branch**: `main` (실제 기본 브랜치에 맞게 설정)
-- **Build Command**: `npm run build`
-- **Output Directory**: `dist`
-- **Node.js Version**: `24.x` (Settings → Build and Deployment에서 확인)
-- **Environment Variables**: 이번 실습에서는 설정하지 않음
+### 0. 배포할 코드 확정과 로컬 검증
 
 README의 `BrowserRouter` 예제를 사용하는 경우, 상세 페이지 직접 접속·새로고침을 위해 프로젝트 루트에 `vercel.json`을 추가합니다. 실제 저장소의 `HashRouter`는 그대로 사용할 수 있습니다.
 
@@ -1780,7 +2071,55 @@ README의 `BrowserRouter` 예제를 사용하는 경우, 상세 페이지 직접
 
 이 설정은 화면 라우팅용입니다. 가상 데이터와 LocalStorage를 사용하므로 별도 서버 없이 배포할 수 있습니다. [Vercel Vite 배포 문서](https://vercel.com/docs/frameworks/frontend/vite)
 
-이번 배포는 Vercel 대시보드의 `Deploy`로 진행합니다. 저장소의 기존 `npm run deploy`는 GitHub Pages용 명령이므로 이번 실습에서는 실행하지 않습니다.
+`vercel.json`까지 저장한 뒤, 프로젝트 루트에서 실행합니다.
+
+```bash
+npm run typecheck
+npm run lint
+npm run build
+npm run preview
+```
+
+터미널의 미리보기 주소(기본 `http://localhost:4173`)에서 목록·필터·상세·인기·좋아요·제보를 확인합니다. README 예제는 `/list`, 완성 저장소는 `/#/list`로 접속합니다. 상세 URL 직접 접속과 새로고침, 제보 저장 후 새로고침도 확인합니다.
+
+검증을 마치면 `Ctrl+C`로 미리보기 서버를 종료합니다. **수정한 전체 소스·설정·`package-lock.json`·`vercel.json`을 최종 커밋하고 push**합니다. 처음 템플릿을 만들었을 때의 커밋만 올라가 있으면 Vercel에도 템플릿 화면이 배포됩니다.
+
+```bash
+git status
+git add .
+git commit -m "Complete TypeScript foodmap practice"
+git push origin main
+```
+
+이미 최종 코드가 반영되어 변경 사항이 없다면 추가 커밋은 생략합니다. GitHub에서 최신 커밋과 파일들이 보이는지 확인한 후 아래 Import를 진행합니다.
+
+### 1. Vercel 계정 연결
+
+1. [vercel.com](https://vercel.com) 로그인
+2. `Add New` → `Project` 선택
+3. GitHub 저장소 Import 화면으로 이동
+
+### 2. GitHub 연결
+
+1. GitHub 계정 연결
+2. GitHub 저장소 접근 권한 승인
+3. 실습 리포지토리 검색
+4. 리포지토리 선택 후 `Import`
+
+### 3. 빌드 설정
+
+Vercel 빌드 설정은 자동으로 감지되지만, 확인 필요:
+
+- **Framework Preset**: `Vite`
+- **Root Directory**: `package.json`이 있는 프로젝트 루트
+- **Production Branch**: `main` (실제 기본 브랜치에 맞게 설정)
+- **Install Command**: `npm ci` (`package-lock.json`이 GitHub에 반영되어 있어야 함)
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Node.js Version**: `24.x` (Settings → Build and Deployment에서 확인; [Vercel Node 24 안내](https://vercel.com/changelog/node-js-24-lts-is-now-generally-available-for-builds-and-functions))
+- **Environment Variables**: 이번 실습에서는 설정하지 않음
+
+이번 배포는 Vercel 대시보드의 `Deploy`로 진행합니다. 완성 저장소의 기존 `npm run deploy`는 GitHub Pages용입니다. A 경로의 패키지 예제에는 이 명령이 없으며, 두 경로 모두 이번 배포는 Vercel 대시보드에서 진행합니다.
 
 `Deploy` 클릭!
 
@@ -1795,6 +2134,7 @@ README의 `BrowserRouter` 예제를 사용하는 경우, 상세 페이지 직접
 1. 프로젝트의 `Settings` → `Domains`에서 실제 도메인 확인
 2. 해당 주소에서 목록·상세·제보 화면이 동작하는지 확인
 3. Preview 배포의 저장 데이터는 Production 주소와 별개임을 확인
+4. 제출할 Production 도메인을 시크릿 창에서 열어 로그인 없이 접속 가능한지 확인. 인증 화면이 나오면 프로젝트의 Deployment Protection 설정과 제출 주소를 확인합니다. [Vercel 접근 보호 안내](https://vercel.com/docs/deployment-protection)
 
 ### 6. 제보 확인
 
@@ -1818,15 +2158,26 @@ README의 `BrowserRouter` 예제를 사용하는 경우, 상세 페이지 직접
 4. 빌드 로그의 오류 수정 후 재배포
 ```
 
-### 문제 2: 제보가 작동하지 않음
+### 문제 2: TypeScript·ESLint 설정 오류
+
+- `Missing script: typecheck`: `package.json`을 예제 전체 내용으로 교체했는지 확인합니다.
+- `Cannot find module` 또는 타입 패키지 오류: `package.json` 교체 후 `npm install`을 다시 실행하고, 파일명 대소문자와 `.ts`·`.tsx` 경로를 확인합니다.
+- 린트 설정이 반영되지 않음: 루트에 `eslint.config.js`가 남아 있으면 삭제하고 `eslint.config.ts`만 둡니다.
+- 설치 로그의 `npm audit` 경고는 빌드 실패와 구분합니다. 새 실습용 예제는 Vercel에 불필요한 `gh-pages`를 제외했습니다. 기존 lockfile의 경고와 검증 범위는 아래 검토 기록을 참고하고, 메이저 버전을 바꾸는 `npm audit fix --force`를 실습 중 일괄 실행하지 않습니다.
+
+### 문제 3: 제보가 작동하지 않음
 
 1. 필수 입력값과 이메일 형식 확인
 2. 브라우저의 사이트 데이터 저장이 허용되어 있는지 확인
-3. Local Storage의 `pwd-week5-submissions` 값이 JSON 배열인지 확인
+3. Local Storage의 `pwd-week5-submissions` 값이 JSON 배열이고 각 항목의 `restaurantName`, `category`, `location`, `id`, `status` 형식이 맞는지 확인
 4. 데이터를 확인하는 사이트 주소가 제보한 주소와 같은지 확인
 
+## 🔎 실습 재현 검토 기록
+
+2026년 10월 12일에 README 예제를 새 프로젝트로 구성한 A 경로와 완성 저장소의 B 경로를 각각 독립 설치했습니다. 두 경로 모두 타입 검사·린트·빌드와 브라우저 검증 **총 40개 항목**을 통과했습니다. A 경로의 신규 설치는 `npm audit` 0건이며, B 경로의 기존 lockfile에는 경고 23건이 남아 있습니다. 실제 Vercel 계정 배포는 별도 확인 대상입니다. [검토 결과와 재현 근거](reports/readme-review-2026-10-12.md)
+
 ## 💬 도움 & 질문
-- [Practical Web Service TA] (https://chatgpt.com/g/g-68bbbf3aa57081919811dd57100b1e46-ajou-digtalmedia-practical-web-service-ta)
+- [Practical Web Service TA](https://chatgpt.com/g/g-68bbbf3aa57081919811dd57100b1e46-ajou-digtalmedia-practical-web-service-ta)
 ---
 
 
@@ -1850,9 +2201,10 @@ README의 `BrowserRouter` 예제를 사용하는 경우, 상세 페이지 직접
 ### Vercel App URL
 (예: https://<project-name>.vercel.app)
 ### 실습 체크리스트
-- GitHub 저장소에 프로젝트 버전 관리가 바르게 되고 있는가?
-- React로 개발한 컴포넌트와 페이지들이 모두 바르게 동작하는가?
-- Vercel에 GitHub 저장소가 연결되어 자동 배포가 이루어 지고 있는가?
+- GitHub의 최신 커밋에 최종 소스·설정·`package-lock.json`·`vercel.json`이 모두 포함되어 있는가?
+- `npm run typecheck`, `npm run lint`, `npm run build`가 모두 통과하는가?
+- 목록·필터·상세·인기·좋아요·제보가 동작하고, 상세 URL 새로고침과 모바일 화면도 확인했는가?
+- Vercel에 GitHub 저장소가 연결되어 최신 커밋이 배포되었고, 제출할 Production URL을 시크릿 창에서도 열 수 있는가?
 - 맛집 정보 제출 시 현재 브라우저의 LocalStorage에 데이터가 잘 저장되었는가?
 
 
@@ -1868,5 +2220,5 @@ README의 `BrowserRouter` 예제를 사용하는 경우, 상세 페이지 직접
 
 ---
 
-*Last Updated: 2026.09.23*\
+*Last Updated: 2026.10.12*\
 *Created by: Hyunseok Oh - Ajou Digital Media Practical Web Service*
